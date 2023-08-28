@@ -1,0 +1,156 @@
+﻿<Window x:Class="WpfDicomMprViewerDemo.MprCurvilinearSliceWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cc="clr-namespace:WpfDicomMprViewerDemo"        
+    xmlns:ImagingControls="clr-namespace:Vintasoft.Imaging.Wpf.UI;assembly=Vintasoft.Imaging.Wpf.UI"
+    xmlns:CustomConstrols="clr-namespace:WpfDemosCommonCode.Imaging"
+    xmlns:DicomViewerDemoControls ="clr-namespace:WpfDicomMprViewerDemo"
+    Title="Curvilinear Slice" Height="700" Width="900" WindowStartupLocation="CenterOwner">
+
+    <Window.CommandBindings>
+        <!--'File' menu-->
+        <CommandBinding x:Name="saveImageCommandBinding" Command="{x:Static cc:MprCurvilinearSliceWindow._saveImageCommand}" CanExecute="saveImageCommandBinding_CanExecute" Executed="file_saveViewerScreenshotMenuItem_Click"/>
+        <CommandBinding x:Name="saveAllImagesCommandBinding" Command="{x:Static cc:MprCurvilinearSliceWindow._saveAllImagesCommand}" CanExecute="saveAllImagesCommandBinding_CanExecute" Executed="file_saveAllViewersScreenshotsMenuItem_Click"/>
+        <CommandBinding x:Name="copyImageToClipboardCommandBinding" Command="{x:Static cc:MprCurvilinearSliceWindow._copyImageToClipboardCommand}" CanExecute="copyImageToClipboardCommandBinding_CanExecute" Executed="file_copyImageToClipboardMenuItem_Click"/>
+        <CommandBinding x:Name="saveImageSliceCommandBinding" Command="{x:Static cc:MprCurvilinearSliceWindow._saveImageSliceCommand}" CanExecute="saveImageSliceCommandBinding_CanExecute" Executed="file_saveImageSliceMenuItem_Click"/>
+        <CommandBinding x:Name="saveAllImagesSlicesCommandBinding" Command="{x:Static cc:MprCurvilinearSliceWindow._saveAllImagesSlicesCommand}" CanExecute="saveAllImagesSlicesCommandBinding_CanExecute" Executed="file_saveAllImagesSlicesMenuItem_Click"/>
+        <CommandBinding x:Name="copyImageSliceToClipboardCommandBinding" Command="{x:Static cc:MprCurvilinearSliceWindow._copyImageSliceToClipboardCommand}" CanExecute="copyImageSliceToClipboardCommandBinding_CanExecute" Executed="file_copyImageSliceToClipboardMenuItem_Click"/>
+        <CommandBinding x:Name="exitCommandBinding" Command="{x:Static cc:MprCurvilinearSliceWindow._exitCommand}" CanExecute="exitCommandBinding_CanExecute" Executed="file_exitMenuItem_Click"/>
+
+        <!--'View' menu-->
+        <CommandBinding x:Name="resetSceneCommandBinding" Command="{x:Static cc:MprCurvilinearSliceWindow._resetSceneCommand}" CanExecute="resetSceneCommandBinding_CanExecute" Executed="view_resetSceneMenuItem_Click"/>
+        <CommandBinding x:Name="fitSceneCommandBinding" Command="{x:Static cc:MprCurvilinearSliceWindow._fitSceneCommand}" CanExecute="fitSceneCommandBinding_CanExecute" Executed="view_fitSceneMenuItem_Click"/>
+        <CommandBinding x:Name="negativeImageCommandBinding" Command="{x:Static cc:MprCurvilinearSliceWindow._negativeImageCommand}" CanExecute="negativeImageCommandBinding_CanExecute" Executed="view_negativeImageMenuItem_Click"/>
+        <CommandBinding x:Name="resetToDefaultWindowLevelCommandBinding" Command="{x:Static cc:MprCurvilinearSliceWindow._resetToDefaultWindowLevelCommand}" CanExecute="resetToDefaultWindowLevelCommandBinding_CanExecute" Executed="view_resetToDefaultWindowLevelMenuItem_Click"/>
+        <CommandBinding x:Name="useInterpolationCommandBinding" Command="{x:Static cc:MprCurvilinearSliceWindow._useInterpolationCommand}" CanExecute="useInterpolationCommandBinding_CanExecute" Executed="view_useInterpolationMenuItem_Click"/>
+        <CommandBinding x:Name="fullScreenCommandBinding" Command="{x:Static cc:MprCurvilinearSliceWindow._fullScreenCommand}" CanExecute="fullScreenCommandBinding_CanExecute" Executed="view_fullScreenMenuItem_Click"/>
+        <CommandBinding x:Name="topPanelAlwaysVisibleCommandBinding" Command="{x:Static cc:MprCurvilinearSliceWindow._topPanelAlwaysVisibleCommand}" CanExecute="topPanelAlwaysVisibleCommandBinding_CanExecute" Executed="view_topPanelAlwaysVisibleMenuItem_Click"/>
+    </Window.CommandBindings>
+
+    <Window.InputBindings>
+        <!--'File' menu-->
+        <KeyBinding Command="{x:Static cc:MprCurvilinearSliceWindow._saveImageCommand}" Modifiers="ALT" Key="S" />
+        <KeyBinding Command="{x:Static cc:MprCurvilinearSliceWindow._saveAllImagesCommand}" Modifiers="ALT+SHIFT" Key="S" />
+        <KeyBinding Command="{x:Static cc:MprCurvilinearSliceWindow._copyImageToClipboardCommand}" Modifiers="ALT" Key="C" />
+        <KeyBinding Command="{x:Static cc:MprCurvilinearSliceWindow._saveImageSliceCommand}" Modifiers="CTRL" Key="S" />
+        <KeyBinding Command="{x:Static cc:MprCurvilinearSliceWindow._saveAllImagesSlicesCommand}" Modifiers="CTRL+SHIFT" Key="S" />
+        <KeyBinding Command="{x:Static cc:MprCurvilinearSliceWindow._copyImageSliceToClipboardCommand}" Modifiers="CTRL" Key="C" />
+        <KeyBinding Command="{x:Static cc:MprCurvilinearSliceWindow._exitCommand}" Modifiers="ALT" Key="X" />
+
+        <!--'View' menu-->
+        <KeyBinding Command="{x:Static cc:MprCurvilinearSliceWindow._resetSceneCommand}" Modifiers="CTRL" Key="R" />
+        <KeyBinding Command="{x:Static cc:MprCurvilinearSliceWindow._fitSceneCommand}" Modifiers="CTRL" Key="F" />
+        <KeyBinding Command="{x:Static cc:MprCurvilinearSliceWindow._negativeImageCommand}" Modifiers="CTRL" Key="I" />
+        <KeyBinding Command="{x:Static cc:MprCurvilinearSliceWindow._resetToDefaultWindowLevelCommand}" Modifiers="CTRL" Key="W" />
+        <KeyBinding Command="{x:Static cc:MprCurvilinearSliceWindow._useInterpolationCommand}" Key="F9" />
+        <KeyBinding Command="{x:Static cc:MprCurvilinearSliceWindow._fullScreenCommand}" Key="F5" />
+        <KeyBinding Command="{x:Static cc:MprCurvilinearSliceWindow._topPanelAlwaysVisibleCommand}" Key="F6" />
+    </Window.InputBindings>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Name="topPanel">
+            <Menu>
+                <MenuItem Header="File" Name="fileMenuItem">
+                    <MenuItem HeaderStringFormat="{}{0} (Alt + S)" Header="Save Viewer Screenshot..." Name="file_saveImageMenuItem" Click="file_saveViewerScreenshotMenuItem_Click" />
+                    <MenuItem HeaderStringFormat="{}{0} (Alt + Shift + S)" Header="Save All Viewers Screenshots..." Name="file_saveAllImagesMenuItem" Click="file_saveAllViewersScreenshotsMenuItem_Click" />
+                    <Separator />
+                    <MenuItem HeaderStringFormat="{}{0} (Alt + C)" Header="Copy Viewer Screenshot To Clipboard" Name="file_copyImageToClipboardMenuItem" Click="file_copyImageToClipboardMenuItem_Click" />
+                    <Separator />
+                    <MenuItem HeaderStringFormat="{}{0} (Ctrl + S)" Header="Save Image Slice..." Name="file_saveImageSliceMenuItem" Click="file_saveImageSliceMenuItem_Click" />
+                    <MenuItem HeaderStringFormat="{}{0} (Ctrl + Shift + S)" Header="Save All Images Slices..." Name="file_saveAllImagesSlicesMenuItem" Click="file_saveAllImagesSlicesMenuItem_Click" />
+                    <Separator />
+                    <MenuItem HeaderStringFormat="{}{0} (Ctrl + C)" Header="Copy Image Slice To Clipboard" Name="file_copyImageSliceToClipboardMenuItem" Click="file_copyImageSliceToClipboardMenuItem_Click" />
+                    <Separator />
+                    <MenuItem HeaderStringFormat="{}{0} (Alt + X)" Header="Exit" Name="file_exitMenuItem" Click="file_exitMenuItem_Click" />
+                </MenuItem>
+
+                <MenuItem Header="View" Name="viewMenuItem" SubmenuOpened="viewMenuItem_SubmenuOpened">
+                    <MenuItem HeaderStringFormat="{}{0} (Ctrl + R)" Header="Reset Scene" Name="view_resetSceneMenuItem" Click="view_resetSceneMenuItem_Click" />
+                    <MenuItem HeaderStringFormat="{}{0} (Ctrl + F)" Header="Fit Scene" Name="view_fitSceneMenuItem" Click="view_fitSceneMenuItem_Click" />
+                    <Separator />
+                    <MenuItem Header="Synchronize Window Level" Name="view_synchronizeWindowLevelMenuItem" Click="view_synchronizeWindowLevelMenuItem_Click" IsChecked="True" />
+                    <MenuItem HeaderStringFormat="{}{0} (Ctrl + I)" Header="Is Negative" Name="view_negativeImageMenuItem" Click="view_negativeImageMenuItem_Click" />
+                    <MenuItem Header="Reset Window Level" Name="view_resetWindowLevelMenuItem" Click="view_resetWindowLevelMenuItem_Click" />
+                    <MenuItem HeaderStringFormat="{}{0} (Ctrl + W)" Header="Reset To Default Window Level" Name="view_resetToDefaultWindowLevelMenuItem" Click="view_resetToDefaultWindowLevelMenuItem_Click" />
+                    <Separator />
+                    <MenuItem Header="Show Window Level" Name="view_showWindowLevelMenuItem" Click="view_showWindowLevelMenuItem_Click" IsChecked="True"/>
+                    <MenuItem Header="Show Axis" Name="view_showAxisMenuItem" Click="view_showAxisMenuItem_Click" IsChecked="True"/>
+                    <MenuItem Header="Show Patient Direction" Name="view_showPatientDirectionMenuItem" Click="view_showPatientDirectionMenuItem_Click" IsChecked="True"/>
+                    <MenuItem Header="Show MPR Parameters" Name="view_showMPRParametersMenuItem" Click="view_showMPRParametersMenuItem_Click" />
+                    <Separator />
+                    <MenuItem HeaderStringFormat="{}{0} (F9)" Header="Use Interpolation" Name="view_useInterpolationMenuItem" Click="view_useInterpolationMenuItem_Click" IsChecked="True" />
+                    <MenuItem Header="Automatically Change Zoom When Slice Building" Name="view_automaticallyChangeZoomWhenSliceBuildingMenuItem" IsCheckable="True" IsChecked="True" />
+                    <Separator />
+                    <MenuItem HeaderStringFormat="{}{0} (F5)" Header="Full Screen" Name="view_fullScreenMenuItem" Click="view_fullScreenMenuItem_Click" />
+                    <MenuItem HeaderStringFormat="{}{0} (F6)" Header="Top Panel Always Visible" Name="view_topPanelAlwaysVisibleMenuItem" Click="view_topPanelAlwaysVisibleMenuItem_Click" />
+                    <Separator />
+                    <MenuItem Header="Text Overlay Settings..." Name="view_textOverlaySettingsMenuItem" Click="view_textOverlaySettingsMenuItem_Click" />
+                    <MenuItem Header="Settings..." Name="view_settingsMenuItem" Click="view_settingsMenuItem_Click" />
+                </MenuItem>
+
+                <MenuItem Header="Slice" Name="sliceMenuItem">
+                    <MenuItem Header="Build" Name="slice_buildMenuItem" Click="slice_buildMenuItem_Click" />
+                </MenuItem>
+            </Menu>
+
+            <ToolBarTray>
+                <CustomConstrols:ImageViewerToolBar
+                Grid.Row="1" 
+                x:Name="imageViewerToolBar" 
+                CanOpenFile="False"
+                CanSaveFile="True"
+                CanNavigate="False" 
+                CanPrint="False"
+                CanChangeSizeMode="False"
+                IsChangeSizeModeEnabled="False"
+                SaveFile="file_saveImageSliceMenuItem_Click">
+                </CustomConstrols:ImageViewerToolBar>
+
+                <DicomViewerDemoControls:DicomMprToolInteractionModeToolBar
+                Grid.Row="2"
+                x:Name="dicomMprToolInteractionModeToolBar">
+                </DicomViewerDemoControls:DicomMprToolInteractionModeToolBar>
+
+            </ToolBarTray>
+        </StackPanel>
+
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="430"/>
+                <ColumnDefinition Width="Auto" MinWidth="5" />
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <ImagingControls:WpfImageViewer Background="Black"
+                    SizeMode="BestFit"
+                    CenterImage="True"
+                    InputGestureCopy="{x:Null}"
+                    InputGestureCut="{x:Null}"
+                    InputGestureDelete="{x:Null}"
+                    InputGestureInsert="{x:Null}"
+                    x:Name="planarSliceImageViewer" />
+
+            <GridSplitter Grid.Column="1" Width="5" Height="Auto" HorizontalAlignment="Stretch" ResizeDirection="Columns"/>
+
+            <ImagingControls:WpfImageViewer 
+                    Grid.Column="2"
+                    Margin="0"
+                    Background="Black"
+                    SizeMode="BestFit"
+                    CenterImage="True"
+                    InputGestureCopy="{x:Null}"
+                    InputGestureCut="{x:Null}"
+                    InputGestureDelete="{x:Null}"
+                    InputGestureInsert="{x:Null}"
+                    x:Name="curvilinearSliceImageViewer" />
+
+        </Grid>
+    </Grid>
+
+</Window>

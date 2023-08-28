@@ -1,0 +1,41 @@
+﻿<Window x:Class="WpfDicomMprViewerDemo.MprParametersViewerWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="MPR Parameters Viewer" Height="Auto" MinWidth="450" SizeToContent="WidthAndHeight" 
+    WindowStartupLocation="CenterOwner"
+    ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <GroupBox Grid.Row="0" Name="sliceGroupBox" Header="Slice" Margin="3">
+            <StackPanel>
+                <Label Name="sliceLocationLabel" Content="Location (millimeters): X={0}, Y={1}, Z={2}"/>
+                <Label Name="sliceXAxisLabel" Content="XAxis (vector): X={0}, Y={1}, Z={2}"/>
+                <Label Name="sliceYAxisLabel" Content="YAxis (vector): X={0}, Y={1}, Z={2}"/>
+                <Label Name="sliceWidthLabel" Content="Width (miliimeters): {0}"/>
+                <Label Name="sliceHeightLabel" Content="Height (millimenters): {0}"/>
+            </StackPanel>
+        </GroupBox>
+
+        <GroupBox Grid.Row="1" Name="luminanceMeasureGroupBox" Header="Luminance Measure" Margin="3">
+            <StackPanel>
+                <Label Name="luminanceLocationOnImageLabel" Content="Location on image (pixels): X={0}, Y={1}"/>
+                <Label Name="luminanceLocationOnSliceLabel" Content="Location on slice (millimeters): X={0}, Y={1}"/>
+                <Label Name="luminanceLocationInMprImageLabel" Content="Location in MPR image (millimeters): X={0}, Y={1}, Z={2}"/>
+                <Label Name="luminanceInMprImageLabel" Content="Luminance in MPR Image (16-bit unsigned): {0}"/>
+                <Label Name="luminanceInMprImageLinearLabel" Content="Luminance in MPR Image, linear interpolation (16-bit unsigned): {0}"/>
+                <Label Name="luminanceWithLutLabel" Content="Luminance in Displayed Slice Image, with LUT (8-bit unsigned): {0}"/>
+            </StackPanel>
+        </GroupBox>
+        
+        <Button Grid.Row="2" Name="closeButton" HorizontalAlignment="Right" VerticalAlignment="Center" Width="75" Height="23" Margin="3"
+                Click="closeButton_Click">
+            Close
+        </Button>
+
+    </Grid>
+</Window>

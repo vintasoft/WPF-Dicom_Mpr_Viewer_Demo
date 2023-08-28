@@ -1,0 +1,107 @@
+﻿<ToolBar x:Class="WpfDicomMprViewerDemo.DicomMprToolInteractionModeToolBar"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="31" Width="Auto" Background="Transparent" SnapsToDevicePixels="True">
+   
+    <ToolBar.Resources>
+        <Style TargetType="{x:Type Button}">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="Transparent" />
+            <Setter Property="Focusable" Value="False" />
+        </Style>
+        <Style TargetType="{x:Type Image}">
+            <Setter Property="Width" Value="16" />
+            <Setter Property="Height" Value="16" />
+        </Style>
+        <Style x:Key="VerticalSeparatorStyle" TargetType="{x:Type Separator}" BasedOn="{StaticResource {x:Type Separator}}">
+            <Setter Property="Margin" Value="6,0,6,0"/>
+            <Setter Property="LayoutTransform">
+                <Setter.Value>
+                    <TransformGroup>
+                        <TransformGroup.Children>
+                            <TransformCollection>
+                                <RotateTransform Angle="90"/>
+                            </TransformCollection>
+                        </TransformGroup.Children>
+                    </TransformGroup>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <Style TargetType="{x:Type TextBlock}">
+            <Setter Property="FontSize" Value="15" />
+        </Style>
+        
+        <BitmapImage x:Key="BrowseIcon" UriSource="Icons\Browse.png" />
+        <BitmapImage x:Key="Browse_000Icon" UriSource="Icons\Browse_000.png" />
+        <BitmapImage x:Key="Browse_001Icon" UriSource="Icons\Browse_001.png" />
+        <BitmapImage x:Key="Browse_010Icon" UriSource="Icons\Browse_010.png" />
+        <BitmapImage x:Key="Browse_011Icon" UriSource="Icons\Browse_011.png" />
+        <BitmapImage x:Key="Browse_100Icon" UriSource="Icons\Browse_100.png" />
+        <BitmapImage x:Key="Browse_101Icon" UriSource="Icons\Browse_101.png" />
+        <BitmapImage x:Key="Browse_110Icon" UriSource="Icons\Browse_110.png" />
+        <BitmapImage x:Key="Browse_111Icon" UriSource="Icons\Browse_111.png" />
+        
+        <BitmapImage x:Key="MeasureIcon" UriSource="Icons\Measure.png" />
+        <BitmapImage x:Key="Measure_000Icon" UriSource="Icons\Measure_000.png" />
+        <BitmapImage x:Key="Measure_001Icon" UriSource="Icons\Measure_001.png" />
+        <BitmapImage x:Key="Measure_010Icon" UriSource="Icons\Measure_010.png" />
+        <BitmapImage x:Key="Measure_011Icon" UriSource="Icons\Measure_011.png" />
+        <BitmapImage x:Key="Measure_100Icon" UriSource="Icons\Measure_100.png" />
+        <BitmapImage x:Key="Measure_101Icon" UriSource="Icons\Measure_101.png" />
+        <BitmapImage x:Key="Measure_110Icon" UriSource="Icons\Measure_110.png" />
+        <BitmapImage x:Key="Measure_111Icon" UriSource="Icons\Measure_111.png" />
+        
+        <BitmapImage x:Key="MouseWheelIcon" UriSource="Icons\MouseWheel.png" />
+        
+        <BitmapImage x:Key="PanIcon" UriSource="Icons\Pan.png" />
+        <BitmapImage x:Key="Pan_000Icon" UriSource="Icons\Pan_000.png" />
+        <BitmapImage x:Key="Pan_001Icon" UriSource="Icons\Pan_001.png" />
+        <BitmapImage x:Key="Pan_010Icon" UriSource="Icons\Pan_010.png" />
+        <BitmapImage x:Key="Pan_011Icon" UriSource="Icons\Pan_011.png" />
+        <BitmapImage x:Key="Pan_100Icon" UriSource="Icons\Pan_100.png" />
+        <BitmapImage x:Key="Pan_101Icon" UriSource="Icons\Pan_101.png" />
+        <BitmapImage x:Key="Pan_110Icon" UriSource="Icons\Pan_110.png" />
+        <BitmapImage x:Key="Pan_111Icon" UriSource="Icons\Pan_111.png" />
+   
+        <BitmapImage x:Key="RollIcon" UriSource="Icons\Roll.png" />
+        <BitmapImage x:Key="Roll_000Icon" UriSource="Icons\Roll_000.png" />
+        <BitmapImage x:Key="Roll_001Icon" UriSource="Icons\Roll_001.png" />
+        <BitmapImage x:Key="Roll_010Icon" UriSource="Icons\Roll_010.png" />
+        <BitmapImage x:Key="Roll_011Icon" UriSource="Icons\Roll_011.png" />
+        <BitmapImage x:Key="Roll_100Icon" UriSource="Icons\Roll_100.png" />
+        <BitmapImage x:Key="Roll_101Icon" UriSource="Icons\Roll_101.png" />
+        <BitmapImage x:Key="Roll_110Icon" UriSource="Icons\Roll_110.png" />
+        <BitmapImage x:Key="Roll_111Icon" UriSource="Icons\Roll_111.png" />
+        
+        <BitmapImage x:Key="Rotate3DIcon" UriSource="Icons\Rotate3D.png" />
+        <BitmapImage x:Key="Rotate3D_000Icon" UriSource="Icons\Rotate3D_000.png" />
+        <BitmapImage x:Key="Rotate3D_001Icon" UriSource="Icons\Rotate3D_001.png" />
+        <BitmapImage x:Key="Rotate3D_010Icon" UriSource="Icons\Rotate3D_010.png" />
+        <BitmapImage x:Key="Rotate3D_011Icon" UriSource="Icons\Rotate3D_011.png" />
+        <BitmapImage x:Key="Rotate3D_100Icon" UriSource="Icons\Rotate3D_100.png" />
+        <BitmapImage x:Key="Rotate3D_101Icon" UriSource="Icons\Rotate3D_101.png" />
+        <BitmapImage x:Key="Rotate3D_110Icon" UriSource="Icons\Rotate3D_110.png" />
+        <BitmapImage x:Key="Rotate3D_111Icon" UriSource="Icons\Rotate3D_111.png" />
+
+        <BitmapImage x:Key="WindowLevelIcon" UriSource="Icons\WindowLevel.png" />
+        <BitmapImage x:Key="WindowLevel_000Icon" UriSource="Icons\WindowLevel_000.png" />
+        <BitmapImage x:Key="WindowLevel_001Icon" UriSource="Icons\WindowLevel_001.png" />
+        <BitmapImage x:Key="WindowLevel_010Icon" UriSource="Icons\WindowLevel_010.png" />
+        <BitmapImage x:Key="WindowLevel_011Icon" UriSource="Icons\WindowLevel_011.png" />
+        <BitmapImage x:Key="WindowLevel_100Icon" UriSource="Icons\WindowLevel_100.png" />
+        <BitmapImage x:Key="WindowLevel_101Icon" UriSource="Icons\WindowLevel_101.png" />
+        <BitmapImage x:Key="WindowLevel_110Icon" UriSource="Icons\WindowLevel_110.png" />
+        <BitmapImage x:Key="WindowLevel_111Icon" UriSource="Icons\WindowLevel_111.png" />
+
+        <BitmapImage x:Key="ZoomIcon" UriSource="Icons\Zoom.png" />
+        <BitmapImage x:Key="Zoom_000Icon" UriSource="Icons\Zoom_000.png" />
+        <BitmapImage x:Key="Zoom_001Icon" UriSource="Icons\Zoom_001.png" />
+        <BitmapImage x:Key="Zoom_010Icon" UriSource="Icons\Zoom_010.png" />
+        <BitmapImage x:Key="Zoom_011Icon" UriSource="Icons\Zoom_011.png" />
+        <BitmapImage x:Key="Zoom_100Icon" UriSource="Icons\Zoom_100.png" />
+        <BitmapImage x:Key="Zoom_101Icon" UriSource="Icons\Zoom_101.png" />
+        <BitmapImage x:Key="Zoom_110Icon" UriSource="Icons\Zoom_110.png" />
+        <BitmapImage x:Key="Zoom_111Icon" UriSource="Icons\Zoom_111.png" />
+    </ToolBar.Resources>
+    
+</ToolBar>
