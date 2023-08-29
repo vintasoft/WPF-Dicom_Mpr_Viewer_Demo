@@ -6,7 +6,7 @@ This C# project uses <a href="https://www.vintasoft.com/vsimaging-dotnet-index.h
 
 
 ## Screenshot
-<img src="vintasoft-wpf-dicom-mpr-viewer-demo.png" alt="VintaSoft WPF DICOM MPR Viewer Demo">
+<img src="vintasoft-wpf-dicom-mpr-viewer-demo.png" title="VintaSoft WPF DICOM MPR Viewer Demo">
 
 
 ## Usage
