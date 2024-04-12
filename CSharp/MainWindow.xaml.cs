@@ -287,7 +287,7 @@ namespace WpfDicomMprViewerDemo
         #region 'File' menu
 
         /// <summary>
-        /// Handles the Click event of OpenDicomFilesFromFolderMenuItem object.
+        /// Handles the Click event of openDicomFilesFromFolderMenuItem object.
         /// </summary>
         private void openDicomFilesFromFolderMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -316,7 +316,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of OpenDicomFilesMenuItem object.
+        /// Handles the Click event of openDicomFilesMenuItem object.
         /// </summary>
         private void openDicomFilesMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -324,7 +324,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the OpenFile event of ImageViewerToolBar object.
+        /// Handles the OpenFile event of imageViewerToolBar object.
         /// </summary>
         private void imageViewerToolBar_OpenFile(object sender, EventArgs e)
         {
@@ -332,7 +332,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of CloseDicomSeriesMenuItem object.
+        /// Handles the Click event of closeDicomSeriesMenuItem object.
         /// </summary>
         private void closeDicomSeriesMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -341,7 +341,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of SaveImageToolStripMenuItem object.
+        /// Handles the Click event of saveImageToolStripMenuItem object.
         /// </summary>
         private void saveImageToolStripMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -354,7 +354,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of SaveAllImagesToolStripMenuItem object.
+        /// Handles the Click event of saveAllImagesToolStripMenuItem object.
         /// </summary>
         private void saveAllImagesToolStripMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -377,7 +377,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of CopyImageToClipboardMenuItem object.
+        /// Handles the Click event of copyImageToClipboardMenuItem object.
         /// </summary>
         private void copyImageToClipboardMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -390,7 +390,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of SaveImageSliceMenuItem object.
+        /// Handles the Click event of saveImageSliceMenuItem object.
         /// </summary>
         private void saveImageSliceMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -407,7 +407,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of SaveAllImagesSlicesMenuItem object.
+        /// Handles the Click event of saveAllImagesSlicesMenuItem object.
         /// </summary>
         private void saveAllImagesSlicesMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -432,7 +432,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of CopyImageSliceToClipboardMenuItem object.
+        /// Handles the Click event of copyImageSliceToClipboardMenuItem object.
         /// </summary>
         private void copyImageSliceToClipboardMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -449,7 +449,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of ExitMenuItem object.
+        /// Handles the Click event of exitMenuItem object.
         /// </summary>
         private void exitMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -462,7 +462,7 @@ namespace WpfDicomMprViewerDemo
         #region 'View' menu
 
         /// <summary>
-        /// Handles the Click event of ResetSceneMenuItem object.
+        /// Handles the Click event of resetSceneMenuItem object.
         /// </summary>
         private void resetSceneMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -473,7 +473,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of FitSceneMenuItem object.
+        /// Handles the Click event of fitSceneMenuItem object.
         /// </summary>
         private void fitSceneMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -481,7 +481,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of SynchronizeWindowLevelMenuItem object.
+        /// Handles the Click event of synchronizeWindowLevelMenuItem object.
         /// </summary>
         private void synchronizeWindowLevelMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -508,7 +508,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of NegativeImageMenuItem object.
+        /// Handles the Click event of negativeImageMenuItem object.
         /// </summary>
         private void negativeImageMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -519,7 +519,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of ResetToDefaultWindowLevelMenuItem object.
+        /// Handles the Click event of resetToDefaultWindowLevelMenuItem object.
         /// </summary>
         private void resetToDefaultWindowLevelMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -529,7 +529,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of UseInterpolationMenuItem object.
+        /// Handles the Click event of useInterpolationMenuItem object.
         /// </summary>
         private void useInterpolationMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -555,7 +555,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of ShowAxisMenuItem object.
+        /// Handles the Click event of showAxisMenuItem object.
         /// </summary>
         private void showAxisMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -567,7 +567,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of Show3DAxisMenuItem object.
+        /// Handles the Click event of show3DAxisMenuItem object.
         /// </summary>
         private void show3DAxisMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -577,7 +577,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of ShowMPRParametersMenuItem object.
+        /// Handles the Click event of showMPRParametersMenuItem object.
         /// </summary>
         private void showMPRParametersMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -606,7 +606,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of FullScreenMenuItem object.
+        /// Handles the Click event of fullScreenMenuItem object.
         /// </summary>
         private void fullScreenMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -615,7 +615,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of TopPanelAlwaysVisibleMenuItem object.
+        /// Handles the Click event of topPanelAlwaysVisibleMenuItem object.
         /// </summary>
         private void topPanelAlwaysVisibleMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -635,7 +635,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of TextOverlaySettingsMenuItem object.
+        /// Handles the Click event of textOverlaySettingsMenuItem object.
         /// </summary>
         private void textOverlaySettingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -651,7 +651,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of ShowTextOverlayMenuItem object.
+        /// Handles the Click event of showTextOverlayMenuItem object.
         /// </summary>
         private void showTextOverlayMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -663,7 +663,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of SettingsMenuItem object.
+        /// Handles the Click event of settingsMenuItem object.
         /// </summary>
         private void settingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -694,7 +694,7 @@ namespace WpfDicomMprViewerDemo
         #region 'MPR' menu
 
         /// <summary>
-        /// Handles the Click event of SagittalMenuItem object.
+        /// Handles the Click event of sagittalMenuItem object.
         /// </summary>
         private void sagittalMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -707,7 +707,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of CoronalMenuItem object.
+        /// Handles the Click event of coronalMenuItem object.
         /// </summary>
         private void coronalMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -720,7 +720,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of AxialMenuItem object.
+        /// Handles the Click event of axialMenuItem object.
         /// </summary>
         private void axialMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -733,7 +733,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of CurvilinearSliceOnSagittalMenuItem object.
+        /// Handles the Click event of curvilinearSliceOnSagittalMenuItem object.
         /// </summary>
         private void curvilinearSliceOnSagittalMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -746,7 +746,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of CurvilinearSliceOnCoronalMenuItem object.
+        /// Handles the Click event of curvilinearSliceOnCoronalMenuItem object.
         /// </summary>
         private void curvilinearSliceOnCoronalMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -759,7 +759,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of CurvilinearSliceOnAxialMenuItem object.
+        /// Handles the Click event of curvilinearSliceOnAxialMenuItem object.
         /// </summary>
         private void curvilinearSliceOnAxialMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -795,7 +795,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the DicomImageVoiLutChanged event of DicomViewerTool object.
+        /// Handles the DicomImageVoiLutChanged event of dicomViewerTool object.
         /// </summary>
         private void dicomViewerTool_DicomImageVoiLutChanged(
             object sender,
@@ -823,7 +823,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the MouseDown event of DicomMprTool object.
+        /// Handles the MouseDown event of dicomMprTool object.
         /// </summary>
         private void dicomMprTool_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -842,7 +842,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the MouseMove event of DicomMprTool object.
+        /// Handles the MouseMove event of dicomMprTool object.
         /// </summary>
         private void dicomMprTool_MouseMove(object sender, MouseEventArgs e)
         {
@@ -866,7 +866,7 @@ namespace WpfDicomMprViewerDemo
         #region 'Help' menu
 
         /// <summary>
-        /// Handles the Click event of AboutMenuItem object.
+        /// Handles the Click event of aboutMenuItem object.
         /// </summary>
         private void aboutMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -1589,7 +1589,7 @@ namespace WpfDicomMprViewerDemo
         #region Hot keys
 
         /// <summary>
-        /// Handles the CanExecute event of OpenCommandBinding object.
+        /// Handles the CanExecute event of openCommandBinding object.
         /// </summary>
         private void openCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -1597,7 +1597,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of OpenFromFolderCommandBinding object.
+        /// Handles the CanExecute event of openFromFolderCommandBinding object.
         /// </summary>
         private void openFromFolderCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -1605,7 +1605,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of SaveImageCommandBinding object.
+        /// Handles the CanExecute event of saveImageCommandBinding object.
         /// </summary>
         private void saveImageCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -1613,7 +1613,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of SaveAllImagesCommandBinding object.
+        /// Handles the CanExecute event of saveAllImagesCommandBinding object.
         /// </summary>
         private void saveAllImagesCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -1621,7 +1621,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of CopyImageToClipboardCommandBinding object.
+        /// Handles the CanExecute event of copyImageToClipboardCommandBinding object.
         /// </summary>
         private void copyImageToClipboardCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -1629,7 +1629,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of SaveImageSliceCommandBinding object.
+        /// Handles the CanExecute event of saveImageSliceCommandBinding object.
         /// </summary>
         private void saveImageSliceCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -1637,7 +1637,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of SaveAllImagesSlicesCommandBinding object.
+        /// Handles the CanExecute event of saveAllImagesSlicesCommandBinding object.
         /// </summary>
         private void saveAllImagesSlicesCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -1645,7 +1645,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of CopyImageSliceToClipboardCommandBinding object.
+        /// Handles the CanExecute event of copyImageSliceToClipboardCommandBinding object.
         /// </summary>
         private void copyImageSliceToClipboardCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -1653,7 +1653,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of ExitCommandBinding object.
+        /// Handles the CanExecute event of exitCommandBinding object.
         /// </summary>
         private void exitCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -1661,7 +1661,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of ResetSceneCommandBinding object.
+        /// Handles the CanExecute event of resetSceneCommandBinding object.
         /// </summary>
         private void resetSceneCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -1669,7 +1669,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of FitSceneCommandBinding object.
+        /// Handles the CanExecute event of fitSceneCommandBinding object.
         /// </summary>
         private void fitSceneCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -1677,7 +1677,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of NegativeImageCommandBinding object.
+        /// Handles the CanExecute event of negativeImageCommandBinding object.
         /// </summary>
         private void negativeImageCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -1685,7 +1685,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of ResetToDefaultWindowLevelCommandBinding object.
+        /// Handles the CanExecute event of resetToDefaultWindowLevelCommandBinding object.
         /// </summary>
         private void resetToDefaultWindowLevelCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -1693,7 +1693,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of UseInterpolationCommandBinding object.
+        /// Handles the CanExecute event of useInterpolationCommandBinding object.
         /// </summary>
         private void useInterpolationCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -1701,7 +1701,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of ShowAxisCommandBinding object.
+        /// Handles the CanExecute event of showAxisCommandBinding object.
         /// </summary>
         private void showAxisCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -1709,7 +1709,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of Show3DAxisCommandBinding object.
+        /// Handles the CanExecute event of show3DAxisCommandBinding object.
         /// </summary>
         private void show3DAxisCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -1717,7 +1717,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of FullScreenCommandBinding object.
+        /// Handles the CanExecute event of fullScreenCommandBinding object.
         /// </summary>
         private void fullScreenCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -1725,7 +1725,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of TopPanelAlwaysVisibleCommandBinding object.
+        /// Handles the CanExecute event of topPanelAlwaysVisibleCommandBinding object.
         /// </summary>
         private void topPanelAlwaysVisibleCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -1733,7 +1733,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of ShowTextOverlayCommandBinding object.
+        /// Handles the CanExecute event of showTextOverlayCommandBinding object.
         /// </summary>
         private void showTextOverlayCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {

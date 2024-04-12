@@ -601,7 +601,7 @@ namespace WpfDicomMprViewerDemo
         #region 'Animation' menu
 
         /// <summary>
-        /// Handles the Click event of ShowAnimationMenuItem object.
+        /// Handles the Click event of showAnimationMenuItem object.
         /// </summary>
         private void showAnimationMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -609,7 +609,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the Click event of AnimationRepeatMenuItem object.
+        /// Handles the Click event of animationRepeatMenuItem object.
         /// </summary>
         private void animationRepeatMenuItem_Click(object sender, RoutedEventArgs e)
         {
@@ -617,7 +617,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the TextChanged event of AnimationDelayComboBox object.
+        /// Handles the TextChanged event of animationDelayComboBox object.
         /// </summary>
         private void animationDelayComboBox_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -799,7 +799,7 @@ namespace WpfDicomMprViewerDemo
         #region HotKeys
 
         /// <summary>
-        /// Handles the CanExecute event of SaveImageCommandBinding object.
+        /// Handles the CanExecute event of saveImageCommandBinding object.
         /// </summary>
         private void saveImageCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -807,7 +807,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of SaveImageSliceCommandBinding object.
+        /// Handles the CanExecute event of saveImageSliceCommandBinding object.
         /// </summary>
         private void saveImageSliceCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -815,7 +815,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of ExitCommandBinding object.
+        /// Handles the CanExecute event of exitCommandBinding object.
         /// </summary>
         private void exitCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -823,7 +823,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of ResetSceneCommandBinding object.
+        /// Handles the CanExecute event of resetSceneCommandBinding object.
         /// </summary>
         private void resetSceneCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -831,7 +831,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of FitSceneCommandBinding object.
+        /// Handles the CanExecute event of fitSceneCommandBinding object.
         /// </summary>
         private void fitSceneCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -839,7 +839,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of NegativeImageCommandBinding object.
+        /// Handles the CanExecute event of negativeImageCommandBinding object.
         /// </summary>
         private void negativeImageCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -847,7 +847,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of ResetToDefaultWindowLevelCommandBinding object.
+        /// Handles the CanExecute event of resetToDefaultWindowLevelCommandBinding object.
         /// </summary>
         private void resetToDefaultWindowLevelCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -855,7 +855,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of UseInterpolationCommandBinding object.
+        /// Handles the CanExecute event of useInterpolationCommandBinding object.
         /// </summary>
         private void useInterpolationCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -863,7 +863,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of FullScreenCommandBinding object.
+        /// Handles the CanExecute event of fullScreenCommandBinding object.
         /// </summary>
         private void fullScreenCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -871,7 +871,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of TopPanelAlwaysVisibleCommandBinding object.
+        /// Handles the CanExecute event of topPanelAlwaysVisibleCommandBinding object.
         /// </summary>
         private void topPanelAlwaysVisibleCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
@@ -879,7 +879,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the CanExecute event of ShowTextOverlayCommandBinding object.
+        /// Handles the CanExecute event of showTextOverlayCommandBinding object.
         /// </summary>
         private void showTextOverlayCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
