@@ -22,5 +22,5 @@ using System.Windows;
     ResourceDictionaryLocation.SourceAssembly //where the generic resource dictionary is located
 )]
 
-[assembly: AssemblyVersion("12.4.7.1")]
-[assembly: AssemblyFileVersion("12.4.7.1")]
+[assembly: AssemblyVersion("12.4.8.1")]
+[assembly: AssemblyFileVersion("12.4.8.1")]
