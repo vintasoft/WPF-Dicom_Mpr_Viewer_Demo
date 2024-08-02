@@ -13,7 +13,7 @@
     <GenerateAssemblyProductAttribute>false</GenerateAssemblyProductAttribute>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>    
     <EnableDefaultItems>false</EnableDefaultItems>
-    <Version>12.4.10.1</Version>
+    <Version>12.5.0.1</Version>
     <AssemblyName>WpfDicomMprViewerDemo</AssemblyName>
     <RootNamespace>WpfDicomMprViewerDemo</RootNamespace>
     <ApplicationIcon>App.ico</ApplicationIcon>
@@ -34,21 +34,21 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Vintasoft.Imaging" Version="12.4.10.1" />
-    <PackageReference Include="Vintasoft.Imaging.Gdi" Version="12.4.10.1" />
-    <PackageReference Include="Vintasoft.Imaging.Dicom" Version="5.4.10.1" />
-    <PackageReference Include="Vintasoft.Imaging.Annotation" Version="12.4.10.1" />
-    <PackageReference Include="Vintasoft.Imaging.Annotation.UI" Version="12.4.10.1" />
-    <PackageReference Include="Vintasoft.Imaging.Annotation.Wpf.UI" Version="12.4.10.1" />
-    <PackageReference Include="Vintasoft.Imaging.Dicom.Mpr" Version="5.4.10.1" />
-    <PackageReference Include="Vintasoft.Imaging.Dicom.Mpr.Wpf.UI" Version="5.4.10.1" />
-    <PackageReference Include="Vintasoft.Imaging.Dicom.Wpf.UI" Version="5.4.10.1" />
-    <PackageReference Include="Vintasoft.Imaging.Jpeg2000Codec" Version="8.4.10.1" />
-    <PackageReference Include="Vintasoft.Imaging.UI" Version="12.4.10.1" />
-    <PackageReference Include="Vintasoft.Imaging.WebpCodec" Version="12.4.10.1" />
-    <PackageReference Include="Vintasoft.Imaging.Wpf" Version="12.4.10.1" />
-    <PackageReference Include="Vintasoft.Imaging.Wpf.UI" Version="12.4.10.1" />
-    <PackageReference Include="Vintasoft.Shared" Version="4.2.0.1" />
+    <PackageReference Include="Vintasoft.Imaging" Version="12.5.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.Gdi" Version="12.5.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.Dicom" Version="5.5.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.Annotation" Version="12.5.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.Annotation.UI" Version="12.5.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.Annotation.Wpf.UI" Version="12.5.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.Dicom.Mpr" Version="5.5.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.Dicom.Mpr.Wpf.UI" Version="5.5.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.Dicom.Wpf.UI" Version="5.5.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.Jpeg2000Codec" Version="8.5.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.UI" Version="12.5.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.WebpCodec" Version="12.5.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.Wpf" Version="12.5.0.1" />
+    <PackageReference Include="Vintasoft.Imaging.Wpf.UI" Version="12.5.0.1" />
+    <PackageReference Include="Vintasoft.Shared" Version="4.3.0.1" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -283,31 +283,11 @@
     </Compile>
     <Compile Include="Dialogs\MPR\Settings\VisualMprSliceAppearanceSettings.cs" />
     <Compile Include="Dialogs\MPR\WpfDicomMprFillDataProgressTextOverlay.cs" />
-    <Compile Include="DicomSeriesController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
     <Compile Include="WpfCompressionInfoTextOverlay.cs" />
     <Compile Include="WpfMprSourceDataController.cs" />
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
     <AppDesigner Include="Properties\" />
     <Resource Include="Resources\VOI_LUT.png" />
     <Resource Include="App.ico" />

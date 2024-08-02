@@ -69,23 +69,32 @@ namespace WpfDicomMprViewerDemo
         #region PROTECTED
 
         /// <summary>
-        /// Returns the text of text overlay from DICOM frame metadata.
+        /// Returns the text of text overlay from DICOM page metadata.
         /// </summary>
-        /// <param name="frameMetadata">The DICOM frame metadata.</param>
+        /// <param name="pageMetadata">The DICOM page metadata.</param>
         /// <returns>
         /// The text of text overlay.
         /// </returns>
-        protected override string GetOverlayText(DicomFrameMetadata frameMetadata)
+        protected override string GetOverlayText(DicomPageMetadata pageMetadata)
         {
-            string compressionAlgorithm;
+            if (pageMetadata is DicomFrameMetadata)
+            {
+                DicomFrameMetadata frameMetadata = (DicomFrameMetadata)pageMetadata;
 
-            if (frameMetadata.IsLosslessCompression)
-                compressionAlgorithm = "Lossless";
+                string compressionAlgorithm;
+
+                if (frameMetadata.IsLosslessCompression)
+                    compressionAlgorithm = "Lossless";
+                else
+                    compressionAlgorithm = "Lossy";
+
+                return string.Format("{0} ({1})", compressionAlgorithm,
+                    GetCompressionName(frameMetadata.Compression));
+            }
             else
-                compressionAlgorithm = "Lossy";
-
-            return string.Format("{0} ({1})", compressionAlgorithm,
-                GetCompressionName(frameMetadata.Compression));
+            {
+                return string.Empty;
+            }
         }
 
         #endregion

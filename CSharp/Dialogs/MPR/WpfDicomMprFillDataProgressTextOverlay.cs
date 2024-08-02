@@ -91,9 +91,9 @@ namespace WpfDicomMprViewerDemo
         /// Acivates this instance on the specified viewer.
         /// </summary>
         /// <param name="viewer">The viewer.</param>
-        public override void Acivate(WpfImageViewer viewer)
+        public override void Activate(WpfImageViewer viewer)
         {
-            base.Acivate(viewer);
+            base.Activate(viewer);
             if (Tool != null && Tool.MprImageTool != null)
                 MprImage = Tool.MprImageTool.MprImage;
         }

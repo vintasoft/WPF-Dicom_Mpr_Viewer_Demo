@@ -18,9 +18,9 @@ using System.Windows;
 [assembly: ComVisible(false)]
 
 [assembly: ThemeInfo(
-    ResourceDictionaryLocation.None, //where theme specific resource dictionaries are located
-    ResourceDictionaryLocation.SourceAssembly //where the generic resource dictionary is located
+    ResourceDictionaryLocation.None,
+    ResourceDictionaryLocation.SourceAssembly
 )]
 
-[assembly: AssemblyVersion("12.4.10.1")]
-[assembly: AssemblyFileVersion("12.4.10.1")]
+[assembly: AssemblyVersion("12.5.0.1")]
+[assembly: AssemblyFileVersion("12.5.0.1")]

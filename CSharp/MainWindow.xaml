@@ -3,11 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cc="clr-namespace:WpfDicomMprViewerDemo"
     xmlns:ImagingControls="clr-namespace:Vintasoft.Imaging.Wpf.UI;assembly=Vintasoft.Imaging.Wpf.UI"
-    xmlns:WindowsForms="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
     xmlns:CustomConstrols="clr-namespace:WpfDemosCommonCode.Imaging"
     xmlns:vsui="clr-namespace:Vintasoft.Imaging.Wpf.UI;assembly=Vintasoft.Imaging.Wpf.UI"
     xmlns:DicomViewerDemoControls="clr-namespace:WpfDicomMprViewerDemo"
-    xmlns:DicomViewerImaging="clr-namespace:WpfDemosCommonCode.Imaging"        
+    xmlns:vsdui="clr-namespace:Vintasoft.Imaging.Dicom.Wpf.UI;assembly=Vintasoft.Imaging.Dicom.Wpf.UI"      
     Title="VintaSoft WPF Dicom Mpr Viewer Demo" 
     Width="800" Height="600"
     MinWidth="360" MinHeight="320"
@@ -193,7 +192,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <RowDefinition Height="27" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Name="topPanel">
             <Menu>
@@ -286,27 +285,33 @@
             </Grid.RowDefinitions>
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="210"/>
                 <ColumnDefinition Width="Auto" MinWidth="5" />
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10*"/>
+                <ColumnDefinition Width="Auto" MinWidth="5" />
+                <ColumnDefinition Width="10*"/>
             </Grid.ColumnDefinitions>
 
-            <ImagingControls:WpfImageViewer 
-                Grid.Row="0" Grid.RowSpan="3" Grid.Column="0"
-                    Margin="0"
-                    Background="Black"
-                    SizeMode="BestFit"
-                    CenterImage="True"
-                    InputGestureCopy="{x:Null}"
-                    InputGestureCut="{x:Null}"
-                    InputGestureDelete="{x:Null}"
-                    InputGestureInsert="{x:Null}"
-                    x:Name="imageViewer1" />
+            <vsdui:WpfDicomSeriesManagerControl Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" x:Name="dicomSeriesManagerControl1" />
 
             <GridSplitter Grid.Column="1" Width="5" Height="Auto" HorizontalAlignment="Stretch" ResizeDirection="Columns" />
+            
+            <ImagingControls:WpfImageViewer 
+                Grid.Row="0" Grid.RowSpan="3" Grid.Column="2"
+                Margin="0"
+                Background="Black"
+                SizeMode="BestFit"
+                CenterImage="True"
+                InputGestureCopy="{x:Null}"
+                InputGestureCut="{x:Null}"
+                InputGestureDelete="{x:Null}"
+                InputGestureInsert="{x:Null}"
+                x:Name="imageViewer1" />
+
+            <GridSplitter Grid.Column="3" Width="5" Height="Auto" HorizontalAlignment="Stretch" ResizeDirection="Columns" />
 
             <ImagingControls:WpfImageViewer 
-                Grid.Row="0" Grid.Column="2"
+                Grid.Row="0" Grid.Column="4"
                     Margin="0"
                     Background="Black"
                     SizeMode="BestFit"
@@ -317,10 +322,10 @@
                     InputGestureInsert="{x:Null}"
                     x:Name="imageViewer2" />
 
-            <GridSplitter Grid.Row="1" Grid.Column="2" Width="Auto" Height="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" ResizeDirection="Rows"/>
+            <GridSplitter Grid.Row="1" Grid.Column="4" Width="Auto" Height="5" VerticalAlignment="Center" HorizontalAlignment="Stretch" ResizeDirection="Rows"/>
 
             <ImagingControls:WpfImageViewer 
-                Grid.Row="2" Grid.Column="2"
+                Grid.Row="2" Grid.Column="4"
                     Margin="0"
                     Background="Black"
                     SizeMode="BestFit"
@@ -332,8 +337,8 @@
                     x:Name="imageViewer3" />
         </Grid>
 
-        <DockPanel Grid.Row="2" Margin="3,0" Name="InfoPanel">
-            <ProgressBar DockPanel.Dock="Left" Width="100" Height="23" Visibility="Collapsed" Name="progressBar1" />
+        <DockPanel Grid.Row="2" Margin="3,0" Name="InfoPanel" Height="23">
+            <ProgressBar DockPanel.Dock="Left" Width="200" Height="23" Visibility="Collapsed" Name="progressBar1" />
             <Label DockPanel.Dock="Left" Content="Action Label" VerticalAlignment="Center" Visibility="Collapsed" Name="actionLabel" />
 
             <Label DockPanel.Dock="Right" HorizontalAlignment="Right" VerticalAlignment="Center" Name="imageInfoStatusLabel" />
