@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+
 using Microsoft.Win32;
 
 using Vintasoft.Imaging;
@@ -191,6 +192,7 @@ namespace WpfDicomMprViewerDemo
             // create DicomMprTool
             _dicomMprTool = _visualizationController.GetDicomMprToolAssociatedWithImageViewer(imageViewer1);
             dicomMprToolInteractionModeToolBar.DicomMprTools = new WpfDicomMprTool[] { _dicomMprTool };
+            _dicomMprTool.MprImageTool.AllowRotate3D = false;
             _dicomMprTool.DicomViewerTool.DicomImageVoiLut = _defaultVoiLut;
             _dicomMprTool.DicomViewerTool.IsImageNegative = isNegativeImage;
             view_negativeImageMenuItem.IsChecked = isNegativeImage;
@@ -212,13 +214,8 @@ namespace WpfDicomMprViewerDemo
             // set scroll bar and tool strip settings
 
             imageViewerToolBar.UseImageViewerImages = false;
-            int longAxisLength = GetPerpendicularAxisLengthInPx(currentSlice);
-            mprSlicePositionVScrollBar.LargeChange = longAxisLength / 10;
-            mprSlicePositionVScrollBar.Maximum = longAxisLength - 1;
-            imageViewerToolBar.PageCount = longAxisLength;
-
-            mprSlicePositionVScrollBar.Value = GetPerpendicularAxisPositionPx(currentSlice);
-            imageViewerToolBar.SelectedPageIndex = (int)mprSlicePositionVScrollBar.Value;
+            imageViewerToolBar.PageCount = GetPerpendicularAxisLengthInPx(currentSlice);
+            imageViewerToolBar.SelectedPageIndex = GetPerpendicularAxisPositionPx(currentSlice);
             imageViewerToolBar.ImageViewer = imageViewer1;
 
             currentSlice.PropertyChanged += new EventHandler<ObjectPropertyChangedEventArgs>(currentSlice_PropertyChanged);
@@ -230,8 +227,6 @@ namespace WpfDicomMprViewerDemo
             _isInitialized = true;
 
             imageViewer1.Focus();
-
-            this.SizeChanged += new SizeChangedEventHandler(Mpr2DWindow_SizeChanged);
         }
 
         #endregion
@@ -735,31 +730,6 @@ namespace WpfDicomMprViewerDemo
         #endregion
 
 
-        #region Scrollbar
-
-        /// <summary>
-        /// Moves the slice.
-        /// </summary>
-        private void mprSlicePositionVScrollBar_ValueChanged(
-            object sender,
-            RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (!_isInitialized)
-                return;
-
-            int value = (int)Math.Round(e.NewValue, MidpointRounding.AwayFromZero);
-            int currentValue = GetPerpendicularAxisPositionPx(_currentSlice);
-
-            if (value != currentValue)
-            {
-                SetPerpendicularAxisPositionPx(_currentSlice, value);
-                e.Handled = true;
-            }
-        }
-
-        #endregion
-
-
         #region Image viewer toolbar
 
         /// <summary>
@@ -937,9 +907,9 @@ namespace WpfDicomMprViewerDemo
         /// </returns>
         private int GetPerpendicularAxisPositionPx(MprPlanarSlice slice)
         {
-            int xAxisPx = _visualizationController.MprImage.XDataLength;
-            int yAxisPx = _visualizationController.MprImage.YDataLength;
-            int zAxisPx = _visualizationController.MprImage.ZDataLength;
+            int xAxisPx = _visualizationController.MprImage.XDataLength - 1;
+            int yAxisPx = _visualizationController.MprImage.YDataLength - 1;
+            int zAxisPx = _visualizationController.MprImage.ZDataLength - 1;
             double xAxisMm = _visualizationController.MprImage.XLength;
             double yAxisMm = _visualizationController.MprImage.YLength;
             double zAxisMm = _visualizationController.MprImage.ZLength;
@@ -1086,10 +1056,6 @@ namespace WpfDicomMprViewerDemo
             // if value must be changed in tool strip
             if (imageViewerToolBar.SelectedPageIndex != perpendicularAxisPosition)
                 imageViewerToolBar.SelectedPageIndex = perpendicularAxisPosition;
-
-            // if value must be changed in scroll bar
-            if (mprSlicePositionVScrollBar.Value != perpendicularAxisPosition)
-                mprSlicePositionVScrollBar.Value = perpendicularAxisPosition;
         }
 
         /// <summary>
@@ -1233,14 +1199,6 @@ namespace WpfDicomMprViewerDemo
         {
             // shows the slices on viewers
             _visualizationController.ShowSliceInViewer(imageViewer1, _currentSlice);
-        }
-
-        /// <summary>
-        /// The window size is changed.
-        /// </summary>
-        private void Mpr2DWindow_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            mprSlicePositionVScrollBar.ViewportSize = ActualHeight / 20;
         }
 
         /// <summary>

@@ -166,6 +166,15 @@ namespace WpfDicomMprViewerDemo
         {
             InitializeComponent();
 
+            dicomMprToolInteractionModeToolBar.SupportedInteractionModes = new WpfDicomMprToolInteractionMode[] {
+                WpfDicomMprToolInteractionMode.Browse,
+                WpfDicomMprToolInteractionMode.Pan,
+                WpfDicomMprToolInteractionMode.Roll,
+                WpfDicomMprToolInteractionMode.WindowLevel,
+                WpfDicomMprToolInteractionMode.Zoom,
+                WpfDicomMprToolInteractionMode.Measure
+            };
+
             _imageToolAppearanceSettings = imageToolAppearanceSettings;
 
             // create visualization controller
@@ -188,6 +197,8 @@ namespace WpfDicomMprViewerDemo
             dicomMprToolInteractionModeToolBar.DicomMprTools = new WpfDicomMprTool[] {
                 _planarSliceDicomMprTool, _curvilinearSliceDicomMprTool };
             view_negativeImageMenuItem.IsChecked = isNegativeImage;
+            _planarSliceDicomMprTool.MprImageTool.AllowRotate3D = false;
+            _planarSliceDicomMprTool.MprImageTool.ScrollProperties.Anchor = AnchorType.Left;
 
             // set appearance to DicomMprTool
             imageToolAppearanceSettings.SetMprToolSettings(_planarSliceDicomMprTool.MprImageTool);
