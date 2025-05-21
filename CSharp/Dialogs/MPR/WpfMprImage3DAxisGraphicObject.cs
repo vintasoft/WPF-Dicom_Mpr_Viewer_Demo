@@ -118,14 +118,16 @@ namespace Vintasoft.Imaging.Dicom.Mpr.Wpf.UI
         }
 
         /// <summary>
-        /// Determines that point belongs the object.
+        /// Returns a value indicating whether point belongs the object.
         /// </summary>
         /// <param name="p">Point in object space.</param>
+        /// <param name="ignoreContainmentCheckDistance">A value indicating whether the point must be checked on the object only
+        /// (ignore the "containment" region around object that is used for object selection).</param>
         /// <returns>
         /// <b>true</b> if point belongs the object;
         /// otherwise, <b>false</b>.
         /// </returns>
-        public override bool IsPointOnObject(Point p)
+        public override bool IsPointOnObject(Point p, bool ignoreContainmentCheckDistance)
         {
             return false;
         }
