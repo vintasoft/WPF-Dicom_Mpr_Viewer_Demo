@@ -273,7 +273,7 @@ namespace WpfDicomMprViewerDemo
             _supportedItems.Add(new WpfMprPlanarSliceLocationTextOverlay());
             _supportedItems.Add(new WpfMprPlanarSliceThicknessTextOverlay());
 
-
+            _supportedItems.Add(new WpfMprImagePointLuminanceTextOverlay());
 
             _supportedItems.Sort(TextOverlayComparer);
             foreach (WpfTextOverlay textOverlay in _supportedItems)
@@ -616,6 +616,6 @@ namespace WpfDicomMprViewerDemo
 
         #endregion
 
-        
+
     }
 }

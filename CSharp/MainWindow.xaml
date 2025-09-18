@@ -229,6 +229,10 @@
                     <MenuItem HeaderStringFormat="{}{0} (F12)" Header="Show 3D Axis" Name="show3DAxisMenuItem" IsChecked="False" Click="show3DAxisMenuItem_Click"/>
                     <MenuItem Header="Show MPR Parameters" Name="showMPRParametersMenuItem" Click="showMPRParametersMenuItem_Click" />
                     <Separator />
+                    <MenuItem Header="Show Rulers In Viewer" Name="showRulersInViewerMenuItem" Click="showRulersOnViewerMenuItem_Click" IsChecked="False" />
+                    <MenuItem Header="Rulers Color..." Name="rulersColorMenuItem" Click="rulersColorMenuItem_Click" />
+                    <MenuItem Header="Rulers Unit Of Measure" Name="rulersUnitOfMeasureMenuItem" Click="rulersUnitOfMeasureMenuItem_Click" />
+                    <Separator />
                     <MenuItem HeaderStringFormat="{}{0} (F5)" Header="Full Screen" Name="fullScreenMenuItem" Click="fullScreenMenuItem_Click" />
                     <MenuItem HeaderStringFormat="{}{0} (F6)" Header="Top Panel Always Visible" Name="topPanelAlwaysVisibleMenuItem" Click="topPanelAlwaysVisibleMenuItem_Click" />
                     <Separator />

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -524,7 +526,7 @@ namespace WpfDicomMprViewerDemo
             _curvilinearSliceDicomMprTool.DicomViewerTool.DicomImageVoiLut =
                 _curvilinearSliceDicomMprTool.DicomViewerTool.DefaultDicomImageVoiLut;
         }
-        
+
         /// <summary>
         /// Shows the window level.
         /// </summary>
@@ -533,12 +535,12 @@ namespace WpfDicomMprViewerDemo
             view_showWindowLevelMenuItem.IsChecked ^= true;
             bool value = view_showWindowLevelMenuItem.IsChecked;
 
-            WpfDicomImageVoiLutTextOverlay planarSliceVoiLutTextOverlay = 
+            WpfDicomImageVoiLutTextOverlay planarSliceVoiLutTextOverlay =
                 _planarSliceDicomMprTool.TextOverlay.Find<WpfDicomImageVoiLutTextOverlay>();
             if (planarSliceVoiLutTextOverlay != null)
                 planarSliceVoiLutTextOverlay.IsVisible = value;
 
-            WpfDicomImageVoiLutTextOverlay curvilinearSliceVoiLutTextOverlay = 
+            WpfDicomImageVoiLutTextOverlay curvilinearSliceVoiLutTextOverlay =
                 _curvilinearSliceDicomMprTool.TextOverlay.Find<WpfDicomImageVoiLutTextOverlay>();
             if (curvilinearSliceVoiLutTextOverlay != null)
                 curvilinearSliceVoiLutTextOverlay.IsVisible = value;
@@ -604,6 +606,62 @@ namespace WpfDicomMprViewerDemo
                     _mprParametersWindow.Close();
                 }
             }
+        }
+
+        /// <summary>
+        /// Handles the showSlicePropertiesMenuItem_Click event of view object.
+        /// </summary>
+        private void view_showSlicePropertiesMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            // get curvlinear slice tool
+            WpfDicomMprTool dicomMprToolWithCurvlinearSlice = _visualizationController.GetDicomMprToolAssociatedWithImageViewer(curvilinearSliceImageViewer);
+            // get curvlinear slice
+            MprCurvilinearSlice curvlinearSlice = (MprCurvilinearSlice)dicomMprToolWithCurvlinearSlice.MprImageTool.FocusedSlice;
+
+            if (curvlinearSlice == null)
+                return;
+
+            // get curvlinear slice reference points
+            VintasoftPoint3D[] curvlinearSliceReferencePoints = curvlinearSlice.GetReferencePointsInWorldSpace();
+
+
+            // get planar slice tool
+            WpfDicomMprTool dicomMprToolWithPlanarSlice = _visualizationController.GetDicomMprToolAssociatedWithImageViewer(planarSliceImageViewer);
+            // get planar slice
+            MprPlanarSlice planarSlice = (MprPlanarSlice)dicomMprToolWithPlanarSlice.MprImageTool.FocusedSlice;
+
+            // get transform from planar slice to viewer space
+            WpfMprSliceView planarSliceView = dicomMprToolWithPlanarSlice.MprImageTool.FocusedSliceView;
+            WpfPointTransform transformFromPlanarSliceToViewerSpace = planarSliceView.GetPointTransform(planarSliceImageViewer, planarSliceImageViewer.Image);
+
+
+            StringBuilder builder = new StringBuilder();
+            builder.AppendLine("Curvlinear slice reference points");
+
+
+            for (int i = 0; i < curvlinearSliceReferencePoints.Length; i++)
+            {
+                // get point in world space
+                VintasoftPoint3D pointInWorldSpace = curvlinearSliceReferencePoints[i];
+                // calculate point in planar slice space
+                Vintasoft.Primitives.VintasoftPoint pointInPlanarSliceSpace = planarSlice.GetPointProjectionOnSlice(pointInWorldSpace);
+                // calculate point in viewer space
+                Point pointInViewerSpace = transformFromPlanarSliceToViewerSpace.TransformPoint(VintasoftWpfConverter.Convert(pointInPlanarSliceSpace));
+
+
+                // add points information
+
+                builder.AppendLine(string.Format("Point{0}", i + 1));
+                builder.AppendLine(string.Format("World space: {0:F1} {1:F1} {2:F1}", pointInWorldSpace.X, pointInWorldSpace.Y, pointInWorldSpace.Z));
+                builder.AppendLine(string.Format("Planar slice: {0:F1} {1:F1}", pointInPlanarSliceSpace.X, pointInPlanarSliceSpace.Y));
+                builder.AppendLine(string.Format("Viewer space: {0:F1} {1:f1}", pointInViewerSpace.X, pointInViewerSpace.Y));
+
+                if (i != curvlinearSliceReferencePoints.Length - 1)
+                    builder.AppendLine();
+            }
+
+            // show points information
+            MessageBox.Show(builder.ToString());
         }
 
         /// <summary>
@@ -689,10 +747,10 @@ namespace WpfDicomMprViewerDemo
             MprImageToolAppearanceSettingsWindow dialog = new MprImageToolAppearanceSettingsWindow(
                  _imageToolAppearanceSettings, selectedSliceType,
                  _sliceType, SliceType.Curvilinear);
-            
+
             dialog.Owner = this;
             dialog.ShowDialog();
-            
+
             UpdateDicomMprSettings();
         }
 

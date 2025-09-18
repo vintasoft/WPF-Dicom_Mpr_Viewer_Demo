@@ -81,7 +81,8 @@
                     <MenuItem Header="Show Window Level" Name="view_showWindowLevelMenuItem" Click="view_showWindowLevelMenuItem_Click" IsChecked="True"/>
                     <MenuItem Header="Show Axis" Name="view_showAxisMenuItem" Click="view_showAxisMenuItem_Click" IsChecked="True"/>
                     <MenuItem Header="Show Patient Direction" Name="view_showPatientDirectionMenuItem" Click="view_showPatientDirectionMenuItem_Click" IsChecked="True"/>
-                    <MenuItem Header="Show MPR Parameters" Name="view_showMPRParametersMenuItem" Click="view_showMPRParametersMenuItem_Click" />
+                    <MenuItem Header="Show MPR Parameters..." Name="view_showMPRParametersMenuItem" Click="view_showMPRParametersMenuItem_Click" />
+                    <MenuItem Header="Show Slice Properties..." Name="view_showSlicePropertiesMenuItem" Click="view_showSlicePropertiesMenuItem_Click" />
                     <Separator />
                     <MenuItem HeaderStringFormat="{}{0} (F9)" Header="Use Interpolation" Name="view_useInterpolationMenuItem" Click="view_useInterpolationMenuItem_Click" IsChecked="True" />
                     <MenuItem Header="Automatically Change Zoom When Slice Building" Name="view_automaticallyChangeZoomWhenSliceBuildingMenuItem" IsCheckable="True" IsChecked="True" />

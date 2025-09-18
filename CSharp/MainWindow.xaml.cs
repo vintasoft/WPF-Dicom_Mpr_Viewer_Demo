@@ -8,7 +8,9 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 
 using Vintasoft.Imaging;
 using Vintasoft.Imaging.Codecs;
@@ -23,8 +25,10 @@ using Vintasoft.Imaging.Metadata;
 using Vintasoft.Imaging.Wpf;
 using Vintasoft.Imaging.Wpf.UI;
 using Vintasoft.Imaging.Wpf.UI.VisualTools;
+using Vintasoft.Imaging.Wpf.UI.VisualTools.GraphicObjects;
 
 using WpfDemosCommonCode;
+using WpfDemosCommonCode.CustomControls;
 using WpfDemosCommonCode.Imaging;
 using WpfDemosCommonCode.Imaging.Codecs;
 
@@ -52,12 +56,12 @@ namespace WpfDicomMprViewerDemo
         /// <summary>
         /// Controller of source data in MPR image.
         /// </summary>
-        WpfMprSourceDataController _mprSourceDataController = new WpfMprSourceDataController();
+        WpfMprSourceDataController _mprSourceDataController;
 
         /// <summary>
         /// The MPR settings manager.
         /// </summary>
-        MprImageToolAppearanceSettings _mprSettingsManager = new MprImageToolAppearanceSettings();
+        MprImageToolAppearanceSettings _mprSettingsManager;
 
         /// <summary>
         /// The visualization controller that manages the visualization of MPR image in image viewers.
@@ -115,6 +119,17 @@ namespace WpfDicomMprViewerDemo
         /// </summary>
         System.Windows.Forms.FolderBrowserDialog _folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
 
+        /// <summary>
+        /// Dictionary: the menu item => rulers units of measure.
+        /// </summary>
+        Dictionary<MenuItem, UnitOfMeasure> _menuItemToRulersUnitOfMeasure =
+            new Dictionary<MenuItem, UnitOfMeasure>();
+
+        /// <summary>
+        /// Current rulers unit menu item.
+        /// </summary>
+        MenuItem _currentRulersUnitOfMeasureMenuItem = null;
+
 
         #region Hot keys
 
@@ -156,6 +171,9 @@ namespace WpfDicomMprViewerDemo
         {
             // register the evaluation license for VintaSoft Imaging .NET SDK
             Vintasoft.Imaging.ImagingGlobalSettings.Register("REG_USER", "REG_EMAIL", "EXPIRATION_DATE", "REG_CODE");
+
+            _mprSourceDataController = new WpfMprSourceDataController();
+            _mprSettingsManager = new MprImageToolAppearanceSettings();
 
             InitializeComponent();
 
@@ -556,6 +574,16 @@ namespace WpfDicomMprViewerDemo
             show3DAxisMenuItem.IsChecked ^= true;
 
             Set3DAxisVisibility(show3DAxisMenuItem.IsChecked);
+        }
+
+        /// <summary>
+        /// Handles the Click event of showRulersOnViewerMenuItem object.
+        /// </summary>
+        private void showRulersOnViewerMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            showRulersInViewerMenuItem.IsChecked ^= true;
+
+            SetRulersVisibility(showRulersInViewerMenuItem.IsChecked);
         }
 
         /// <summary>
@@ -967,6 +995,55 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
+        /// Initializes the unit of measures for rulers.
+        /// </summary>
+        private void InitUnitOfMeasuresForRulers()
+        {
+            UnitOfMeasure[] unitsOfMeasure = new UnitOfMeasure[] {
+                UnitOfMeasure.Centimeters,
+                UnitOfMeasure.Inches,
+                UnitOfMeasure.Millimeters,
+                UnitOfMeasure.Pixels
+            };
+
+            rulersUnitOfMeasureMenuItem.Items.Clear();
+            _menuItemToRulersUnitOfMeasure.Clear();
+
+            UnitOfMeasure? currentUnit = null;
+
+            foreach (WpfDicomMprTool mprTool in _dicomMprTools)
+            {
+                foreach (WpfGraphicObject graphicalOverlay in mprTool.DicomViewerTool.GraphicalOverlay)
+                {
+                    if (graphicalOverlay is WpfImageRulerGraphicObject)
+                    {
+                        WpfImageRulerGraphicObject ruler = (WpfImageRulerGraphicObject)graphicalOverlay;
+
+                        currentUnit = ruler.UnitOfMeasure;
+                        break;
+                    }
+                }
+
+                if (currentUnit != null)
+                    break;
+            }
+
+            foreach (UnitOfMeasure unit in unitsOfMeasure)
+            {
+                MenuItem menuItem = new MenuItem();
+                menuItem.Header = unit.ToString();
+                _menuItemToRulersUnitOfMeasure.Add(menuItem, unit);
+                menuItem.Click += new RoutedEventHandler(rulersUnitOfMeasureMenuItem_Click);
+                if (unit == currentUnit)
+                {
+                    menuItem.IsChecked = true;
+                    _currentRulersUnitOfMeasureMenuItem = menuItem;
+                }
+                rulersUnitOfMeasureMenuItem.Items.Add(menuItem);
+            }
+        }
+
+        /// <summary>
         /// Initializes the file dialogs.
         /// </summary>
         private void InitFileDialogs()
@@ -1032,6 +1109,9 @@ namespace WpfDicomMprViewerDemo
             useInterpolationMenuItem.IsEnabled = isMprCubeInitialized && !isDicomSeriesOpening;
             showAxisMenuItem.IsEnabled = isMprCubeInitialized && !isDicomSeriesOpening;
             show3DAxisMenuItem.IsEnabled = isMprCubeInitialized && !isDicomSeriesOpening;
+            showRulersInViewerMenuItem.IsEnabled = isMprCubeInitialized && !isDicomSeriesOpening;
+            rulersColorMenuItem.IsEnabled = isMprCubeInitialized && !isDicomSeriesOpening;
+            rulersUnitOfMeasureMenuItem.IsEnabled = isMprCubeInitialized && !isDicomSeriesOpening;
             showMPRParametersMenuItem.IsEnabled = isMprCubeInitialized && !isDicomSeriesOpening;
 
             fullScreenMenuItem.IsEnabled = isMprCubeInitialized && !isDicomSeriesOpening;
@@ -1216,7 +1296,29 @@ namespace WpfDicomMprViewerDemo
                     useInterpolationMenuItem.IsChecked = true;
 
                     oldVisualizationController.SetProperties(_visualizationController);
+
+                    foreach (WpfDicomMprTool mprTool in _dicomMprTools)
+                    {
+                        mprTool.DicomViewerTool.IsGraphicalOverlayVisible = true;
+
+                        foreach (WpfGraphicObject overlay in mprTool.DicomViewerTool.GraphicalOverlay)
+                        {
+                            if (overlay is WpfImageRulerGraphicObject)
+                            {
+                                WpfImageRulerGraphicObject ruler = (WpfImageRulerGraphicObject)overlay;
+                                ruler.Padding = 20;
+                            }
+                        }
+
+                        mprTool.DicomViewerTool.GraphicalOverlay.Add(new WpfMprImage3DAxisGraphicObject(_visualizationController));
+
+                        mprTool.TextOverlay.Insert(0, new WpfMprImagePointLuminanceTextOverlay(AnchorType.BottomLeft));
+                    }
+
+                    InitUnitOfMeasuresForRulers();
+
                     Set3DAxisVisibility(show3DAxisMenuItem.IsChecked);
+                    SetRulersVisibility(showRulersInViewerMenuItem.IsChecked);
 
                     oldVisualizationController.Dispose();
                 }
@@ -1296,21 +1398,32 @@ namespace WpfDicomMprViewerDemo
         /// <param name="visibility">The visibility of 3D axis.</param>
         private void Set3DAxisVisibility(bool visibility)
         {
-            if (visibility)
+            foreach (WpfDicomMprTool mprTool in _dicomMprTools)
             {
-                foreach (WpfDicomMprTool mprTool in _dicomMprTools)
+                foreach (Vintasoft.Imaging.Wpf.UI.VisualTools.GraphicObjects.WpfGraphicObject overlay in mprTool.DicomViewerTool.GraphicalOverlay)
                 {
-                    mprTool.DicomViewerTool.GraphicalOverlay.Clear();
-                    mprTool.DicomViewerTool.GraphicalOverlay.Add(new WpfMprImage3DAxisGraphicObject(_visualizationController));
-                    mprTool.DicomViewerTool.IsGraphicalOverlayVisible = true;
+                    if (overlay is WpfMprImage3DAxisGraphicObject)
+                    {
+                        overlay.IsVisible = visibility;
+                    }
                 }
             }
-            else
+        }
+
+        /// <summary>
+        /// Changes the visibility of rulers.
+        /// </summary>
+        /// <param name="visibility">The visibility of rulers.</param>
+        private void SetRulersVisibility(bool visibility)
+        {
+            foreach (WpfDicomMprTool mprTool in _dicomMprTools)
             {
-                foreach (WpfDicomMprTool mprTool in _dicomMprTools)
+                foreach (Vintasoft.Imaging.Wpf.UI.VisualTools.GraphicObjects.WpfGraphicObject overlay in mprTool.DicomViewerTool.GraphicalOverlay)
                 {
-                    mprTool.DicomViewerTool.IsGraphicalOverlayVisible = false;
-                    mprTool.DicomViewerTool.GraphicalOverlay.Clear();
+                    if (overlay is WpfImageRulerGraphicObject)
+                    {
+                        overlay.IsVisible = visibility;
+                    }
                 }
             }
         }
@@ -1417,6 +1530,78 @@ namespace WpfDicomMprViewerDemo
             _mprSettingsManager.SetMprToolSettings(_dicomMprTools[0].MprImageTool);
             _mprSettingsManager.SetMprToolSettings(_dicomMprTools[1].MprImageTool);
             _mprSettingsManager.SetMprToolSettings(_dicomMprTools[2].MprImageTool);
+        }
+
+        /// <summary>
+        /// Handles the Click event of rulersColorMenuItem object.
+        /// </summary>
+        private void rulersColorMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Brush brush = null;
+            foreach (WpfDicomMprTool mprTool in _dicomMprTools)
+            {
+                foreach (WpfGraphicObject graphicalOverlay in mprTool.DicomViewerTool.GraphicalOverlay)
+                {
+                    if (graphicalOverlay is WpfImageRulerGraphicObject)
+                    {
+                        WpfImageRulerGraphicObject ruler = (WpfImageRulerGraphicObject)graphicalOverlay;
+
+                        brush = ruler.RulerPen.Brush;
+                        break;
+                    }
+                }
+
+                if (brush != null)
+                    break;
+            }
+
+            SolidColorBrush solidColorBrush = (SolidColorBrush)brush;
+            ColorPickerDialog dlg = new ColorPickerDialog();
+            dlg.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            dlg.Owner = this;
+            // init dialog
+            dlg.StartingColor = solidColorBrush.Color;
+            // show dialog
+            if (dlg.ShowDialog() == true)
+            {
+                foreach (WpfDicomMprTool mprTool in _dicomMprTools)
+                {
+                    foreach (WpfGraphicObject graphicalOverlay in mprTool.DicomViewerTool.GraphicalOverlay)
+                    {
+                        if (graphicalOverlay is WpfImageRulerGraphicObject)
+                        {
+                            WpfImageRulerGraphicObject ruler = (WpfImageRulerGraphicObject)graphicalOverlay;
+
+                            // update rulers
+                            ruler.RulerPen = new Pen(new SolidColorBrush(dlg.SelectedColor), ruler.RulerPen.Thickness);
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handles the Click event of rulersUnitOfMeasureMenuItem object.
+        /// </summary>
+        private void rulersUnitOfMeasureMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            _currentRulersUnitOfMeasureMenuItem.IsChecked = false;
+            _currentRulersUnitOfMeasureMenuItem = (MenuItem)e.OriginalSource;
+
+            foreach (WpfDicomMprTool mprTool in _dicomMprTools)
+            {
+                foreach (WpfGraphicObject graphicalOverlay in mprTool.DicomViewerTool.GraphicalOverlay)
+                {
+                    if (graphicalOverlay is WpfImageRulerGraphicObject)
+                    {
+                        WpfImageRulerGraphicObject ruler = (WpfImageRulerGraphicObject)graphicalOverlay;
+
+                        ruler.UnitOfMeasure = _menuItemToRulersUnitOfMeasure[_currentRulersUnitOfMeasureMenuItem];
+                    }
+                }
+            }
+
+            _currentRulersUnitOfMeasureMenuItem.IsChecked = true;
         }
 
         #endregion
