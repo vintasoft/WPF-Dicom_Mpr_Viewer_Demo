@@ -94,19 +94,19 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="WindowsFormsIntegration" />
-    <PackageReference Include="Vintasoft.Imaging" Version="14.1.12.1" />
-    <PackageReference Include="Vintasoft.Imaging.Gdi" Version="14.1.12.1" />
-    <PackageReference Include="Vintasoft.Imaging.Dicom" Version="7.1.12.1" />
-    <PackageReference Include="Vintasoft.Imaging.Annotation" Version="14.1.12.1" />
-    <PackageReference Include="Vintasoft.Imaging.Annotation.UI" Version="14.1.12.1" />
-    <PackageReference Include="Vintasoft.Imaging.Annotation.Wpf.UI" Version="14.1.12.1" />
-    <PackageReference Include="Vintasoft.Imaging.Dicom.Mpr" Version="7.1.12.1" />
-    <PackageReference Include="Vintasoft.Imaging.Dicom.Mpr.Wpf.UI" Version="7.1.12.1" />
-    <PackageReference Include="Vintasoft.Imaging.Dicom.Wpf.UI" Version="7.1.12.1" />
-    <PackageReference Include="Vintasoft.Imaging.Jpeg2000Codec" Version="10.1.12.1" />
-    <PackageReference Include="Vintasoft.Imaging.UI" Version="14.1.12.1" />
-    <PackageReference Include="Vintasoft.Imaging.Wpf" Version="14.1.12.1" />
-    <PackageReference Include="Vintasoft.Imaging.Wpf.UI" Version="14.1.12.1" />
+    <PackageReference Include="Vintasoft.Imaging" Version="14.1.14.1" />
+    <PackageReference Include="Vintasoft.Imaging.Gdi" Version="14.1.14.1" />
+    <PackageReference Include="Vintasoft.Imaging.Dicom" Version="7.1.14.1" />
+    <PackageReference Include="Vintasoft.Imaging.Annotation" Version="14.1.14.1" />
+    <PackageReference Include="Vintasoft.Imaging.Annotation.UI" Version="14.1.14.1" />
+    <PackageReference Include="Vintasoft.Imaging.Annotation.Wpf.UI" Version="14.1.14.1" />
+    <PackageReference Include="Vintasoft.Imaging.Dicom.Mpr" Version="7.1.14.1" />
+    <PackageReference Include="Vintasoft.Imaging.Dicom.Mpr.Wpf.UI" Version="7.1.14.1" />
+    <PackageReference Include="Vintasoft.Imaging.Dicom.Wpf.UI" Version="7.1.14.1" />
+    <PackageReference Include="Vintasoft.Imaging.Jpeg2000Codec" Version="10.1.14.1" />
+    <PackageReference Include="Vintasoft.Imaging.UI" Version="14.1.14.1" />
+    <PackageReference Include="Vintasoft.Imaging.Wpf" Version="14.1.14.1" />
+    <PackageReference Include="Vintasoft.Imaging.Wpf.UI" Version="14.1.14.1" />
     <PackageReference Include="Vintasoft.Shared" Version="4.5.0.1" />
   </ItemGroup>
   <ItemGroup>
@@ -127,6 +127,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="CustomControls\NumericUpDown.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CustomControls\PaddingFEditorControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -214,6 +218,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Dialogs\MPR\MprPerpendicualrMultiSliceColumnCountWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\MPR\MprPerpendicularMultiSliceDefaultSettingsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Dialogs\MPR\MprPerpendicularMultiSliceWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Dialogs\MPR\Settings\MprImageToolAppearanceSettingsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -247,6 +263,9 @@
     </Compile>
     <Compile Include="CustomControls\NumericUpDown.xaml.cs">
       <DependentUpon>NumericUpDown.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\PaddingFEditorControl.xaml.cs">
+      <DependentUpon>PaddingFEditorControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="CustomControls\ValueEditorControl.xaml.cs">
       <DependentUpon>ValueEditorControl.xaml</DependentUpon>
@@ -307,6 +326,15 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Dialogs\MPR\MprPerpendicualrMultiSliceColumnCountWindow.xaml.cs">
+      <DependentUpon>MprPerpendicualrMultiSliceColumnCountWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\MPR\MprPerpendicularMultiSliceDefaultSettingsWindow.xaml.cs">
+      <DependentUpon>MprPerpendicularMultiSliceDefaultSettingsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Dialogs\MPR\MprPerpendicularMultiSliceWindow.xaml.cs">
+      <DependentUpon>MprPerpendicularMultiSliceWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Dialogs\MPR\WpfMprImage3DAxisGraphicObject.cs" />
     <Compile Include="MainWindow.xaml.cs">

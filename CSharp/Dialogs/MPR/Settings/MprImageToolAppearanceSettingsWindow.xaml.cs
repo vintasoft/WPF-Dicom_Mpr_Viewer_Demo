@@ -37,6 +37,11 @@ namespace WpfDicomMprViewerDemo
         VisualMprSliceAppearanceSettings _curvilinearSliceSettings;
 
         /// <summary>
+        /// The multi slice appearance settings.
+        /// </summary>
+        VisualMprSliceAppearanceSettings _multiSliceSettings;
+
+        /// <summary>
         /// The available slice types.
         /// </summary>
         SliceType[] _availableSliceTypes;
@@ -236,6 +241,12 @@ namespace WpfDicomMprViewerDemo
                 Manager.CurvilinearSliceAppearance.CopyTo(_curvilinearSliceSettings);
             }
 
+            if (CanChangeSliceSettings(SliceType.Multi))
+            {
+                _multiSliceSettings = new VisualMprSliceAppearanceSettings();
+                Manager.PerpendicularMultiSliceAppearance.CopyTo(_multiSliceSettings);
+            }
+
             if (_availableSliceTypes == null ||
                 _availableSliceTypes.Length == 0)
             {
@@ -244,6 +255,7 @@ namespace WpfDicomMprViewerDemo
                 sliceTypeComboBox.Items.Add(SliceType.Coronal);
                 sliceTypeComboBox.Items.Add(SliceType.Axial);
                 sliceTypeComboBox.Items.Add(SliceType.Curvilinear);
+                sliceTypeComboBox.Items.Add(SliceType.Multi);
             }
             else
             {
@@ -315,6 +327,9 @@ namespace WpfDicomMprViewerDemo
             if (_curvilinearSliceSettings != null)
                 _curvilinearSliceSettings.CopyTo(Manager.CurvilinearSliceAppearance);
 
+            if (_multiSliceSettings != null)
+                _multiSliceSettings.CopyTo(Manager.PerpendicularMultiSliceAppearance);
+
             if (CanChangeColorMarkSettings)
             {
                 // color mark settings
@@ -376,6 +391,7 @@ namespace WpfDicomMprViewerDemo
         private void sliceTypeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             sliceAppearanceEditorControl.ShowCurvilinearSliceSettings = false;
+            sliceAppearanceEditorControl.ShowPerpendicularMultiSliceSettings = false;
 
             switch ((SliceType)sliceTypeComboBox.SelectedItem)
             {
@@ -394,6 +410,11 @@ namespace WpfDicomMprViewerDemo
                 case SliceType.Curvilinear:
                     sliceAppearanceEditorControl.ShowCurvilinearSliceSettings = true;
                     sliceAppearanceEditorControl.SliceSettings = _curvilinearSliceSettings;
+                    break;
+
+                case SliceType.Multi:
+                    sliceAppearanceEditorControl.SliceSettings = _multiSliceSettings;
+                    sliceAppearanceEditorControl.ShowPerpendicularMultiSliceSettings = true;
                     break;
             }
         }

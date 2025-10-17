@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:CustomControls="clr-namespace:WpfDemosCommonCode.CustomControls"
     xmlns:DicomViewerDemoControls ="clr-namespace:WpfDicomMprViewerDemo"
-    Title="MPR Settings" ResizeMode="NoResize" SizeToContent="Height" Height="587.5" Width="700" WindowStartupLocation="CenterOwner">
+    Title="MPR Settings" ResizeMode="NoResize" SizeToContent="Height" Height="600.5" Width="700" WindowStartupLocation="CenterOwner">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -52,7 +52,7 @@
 
         <GroupBox Grid.Row="0" Grid.Column="1" Margin="3,3,3,0"
                   Name="sliceSettingsGroupBox"
-                  Header="Slice Settings" Height="321.5" VerticalAlignment="Top">
+                  Header="Slice Settings" Height="Auto" VerticalAlignment="Top">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>

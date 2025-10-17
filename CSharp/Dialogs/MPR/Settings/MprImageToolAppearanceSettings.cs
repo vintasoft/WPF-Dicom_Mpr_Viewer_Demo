@@ -5,7 +5,6 @@ using Vintasoft.Imaging;
 using Vintasoft.Imaging.Dicom.Mpr;
 using Vintasoft.Imaging.Dicom.Mpr.Wpf.UI;
 using Vintasoft.Imaging.Dicom.Mpr.Wpf.UI.VisualTools;
-using Vintasoft.Imaging.UI;
 using Vintasoft.Primitives;
 
 namespace WpfDicomMprViewerDemo
@@ -27,6 +26,8 @@ namespace WpfDicomMprViewerDemo
             _coronalSliceAppearance.SliceColor = Colors.Coral;
             _axialSliceAppearance.SliceColor = Colors.Yellow;
             _curvilinearSliceAppearance.SliceColor = Colors.Blue;
+            _perpendicularMultiSliceAppearance.SliceColor = Colors.Magenta;
+            _perpendicularMultiSliceAppearance.FocusedSliceColor = Colors.Aqua;
         }
 
         #endregion
@@ -186,6 +187,22 @@ namespace WpfDicomMprViewerDemo
             }
         }
 
+        VisualMprSliceAppearanceSettings _perpendicularMultiSliceAppearance = new VisualMprSliceAppearanceSettings();
+        /// <summary>
+        /// Gets or sets the appearance settings of perpendicular multi slice.
+        /// </summary>
+        public VisualMprSliceAppearanceSettings PerpendicularMultiSliceAppearance
+        {
+            get
+            {
+                return _perpendicularMultiSliceAppearance;
+            }
+            set
+            {
+                _perpendicularMultiSliceAppearance = value;
+            }
+        }
+
         #endregion
 
 
@@ -295,6 +312,7 @@ namespace WpfDicomMprViewerDemo
             CoronalSliceAppearance.CopyTo(manager.CoronalSliceAppearance);
             AxialSliceAppearance.CopyTo(manager.AxialSliceAppearance);
             CurvilinearSliceAppearance.CopyTo(manager.CurvilinearSliceAppearance);
+            PerpendicularMultiSliceAppearance.CopyTo(manager.PerpendicularMultiSliceAppearance);
 
             manager.FocusedImageViewerColorMark = FocusedImageViewerColorMark;
             manager.FocusedImageViewerMarkSize = FocusedImageViewerMarkSize;
@@ -349,6 +367,10 @@ namespace WpfDicomMprViewerDemo
                     CurvilinearSliceAppearance.SetSettings(sliceVisualizer);
                     break;
 
+                case SliceType.Multi:
+                    PerpendicularMultiSliceAppearance.SetSettings(sliceVisualizer);
+                    break;
+
                 default:
                     throw new NotSupportedException();
             }
@@ -362,6 +384,16 @@ namespace WpfDicomMprViewerDemo
             WpfMprSliceVisualizer curvilinearSliceVisualizer)
         {
             CurvilinearSliceAppearance.SetSettings(curvilinearSliceVisualizer);
+        }
+
+        /// <summary>
+        /// Sets the appearance for the perpendicular multi slice.
+        /// </summary>
+        /// <param name="perpendicularMultiSliceVisualizer">The perpendicular multi slice visualizer.</param>
+        public void SetPerpendicularMultiSliceSettings(
+            WpfMprSliceVisualizer perpendicularMultiSliceVisualizer)
+        {
+            PerpendicularMultiSliceAppearance.SetSettings(perpendicularMultiSliceVisualizer);
         }
 
         /// <summary>

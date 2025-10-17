@@ -1,0 +1,145 @@
+﻿<Window x:Class="WpfDicomMprViewerDemo.MprPerpendicularMultiSliceWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:cc="clr-namespace:WpfDicomMprViewerDemo"
+        xmlns:ImagingControls="clr-namespace:Vintasoft.Imaging.Wpf.UI;assembly=Vintasoft.Imaging.Wpf.UI"
+        xmlns:CustomConstrols="clr-namespace:WpfDemosCommonCode.Imaging"
+        xmlns:DicomViewerDemoControls ="clr-namespace:WpfDicomMprViewerDemo"  
+        mc:Ignorable="d"
+        Title="Multi Slice" Height="700" Width="950">
+
+    <Window.CommandBindings>
+        <!--'File' menu-->
+        <CommandBinding x:Name="saveImageCommandBinding" Command="{x:Static cc:Mpr2DWindow._saveImageCommand}" CanExecute="saveImageCommandBinding_CanExecute" Executed="file_saveViewerScreenshotMenuItem_Click"/>
+        <CommandBinding x:Name="saveImageSliceCommandBinding" Command="{x:Static cc:Mpr2DWindow._saveImageSliceCommand}" CanExecute="saveImageSliceCommandBinding_CanExecute" Executed="file_saveImageSliceMenuItem_Click"/>
+        <CommandBinding x:Name="exitCommandBinding" Command="{x:Static cc:Mpr2DWindow._exitCommand}" CanExecute="exitCommandBinding_CanExecute" Executed="file_exitMenuItem_Click"/>
+
+        <!--'View' menu-->
+        <CommandBinding x:Name="resetSceneCommandBinding" Command="{x:Static cc:Mpr2DWindow._resetSceneCommand}" CanExecute="resetSceneCommandBinding_CanExecute" Executed="view_resetSceneMenuItem_Click"/>
+        <CommandBinding x:Name="fitSceneCommandBinding" Command="{x:Static cc:Mpr2DWindow._fitSceneCommand}" CanExecute="fitSceneCommandBinding_CanExecute" Executed="view_fitSceneMenuItem_Click"/>
+        <CommandBinding x:Name="negativeImageCommandBinding" Command="{x:Static cc:Mpr2DWindow._negativeImageCommand}" CanExecute="negativeImageCommandBinding_CanExecute" Executed="view_negativeImageMenuItem_Click"/>
+        <CommandBinding x:Name="resetToDefaultWindowLevelCommandBinding" Command="{x:Static cc:Mpr2DWindow._resetToDefaultWindowLevelCommand}" CanExecute="resetToDefaultWindowLevelCommandBinding_CanExecute" Executed="view_resetToDefaultWindowLevelMenuItem_Click"/>
+        <CommandBinding x:Name="useInterpolationCommandBinding" Command="{x:Static cc:Mpr2DWindow._useInterpolationCommand}" CanExecute="useInterpolationCommandBinding_CanExecute" Executed="view_useInterpolationMenuItem_Click"/>
+        <CommandBinding x:Name="fullScreenCommandBinding" Command="{x:Static cc:Mpr2DWindow._fullScreenCommand}" CanExecute="fullScreenCommandBinding_CanExecute" Executed="view_fullScreenMenuItem_Click"/>
+        <CommandBinding x:Name="topPanelAlwaysVisibleCommandBinding" Command="{x:Static cc:Mpr2DWindow._topPanelAlwaysVisibleCommand}" CanExecute="topPanelAlwaysVisibleCommandBinding_CanExecute" Executed="view_topPanelAlwaysVisibleMenuItem_Click"/>
+        <CommandBinding x:Name="showTextOverlayCommandBinding" Command="{x:Static cc:Mpr2DWindow._showTextOverlayCommand}" CanExecute="showTextOverlayCommandBinding_CanExecute" Executed="view_showTextOverlayMenuItem_Click"/>
+    </Window.CommandBindings>
+
+    <Window.InputBindings>
+        <!--'File' menu-->
+        <KeyBinding Command="{x:Static cc:Mpr2DWindow._saveImageCommand}" Modifiers="ALT" Key="S" />
+        <KeyBinding Command="{x:Static cc:Mpr2DWindow._saveImageSliceCommand}" Modifiers="CTRL" Key="S" />
+        <KeyBinding Command="{x:Static cc:Mpr2DWindow._exitCommand}" Modifiers="ALT" Key="X" />
+
+        <!--'View' menu-->
+        <KeyBinding Command="{x:Static cc:Mpr2DWindow._resetSceneCommand}" Modifiers="CTRL" Key="R" />
+        <KeyBinding Command="{x:Static cc:Mpr2DWindow._fitSceneCommand}" Modifiers="CTRL" Key="F" />
+        <KeyBinding Command="{x:Static cc:Mpr2DWindow._negativeImageCommand}" Modifiers="CTRL" Key="I" />
+        <KeyBinding Command="{x:Static cc:Mpr2DWindow._resetToDefaultWindowLevelCommand}" Modifiers="CTRL" Key="W" />
+        <KeyBinding Command="{x:Static cc:Mpr2DWindow._useInterpolationCommand}" Key="F9" />
+        <KeyBinding Command="{x:Static cc:Mpr2DWindow._fullScreenCommand}" Key="F5" />
+        <KeyBinding Command="{x:Static cc:Mpr2DWindow._topPanelAlwaysVisibleCommand}" Key="F6" />
+        <KeyBinding Command="{x:Static cc:Mpr2DWindow._showTextOverlayCommand}" Key="F10" />
+    </Window.InputBindings>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="29" />
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0" Name="topPanel">
+            <Menu>
+                <MenuItem Header="File" Name="fileMenuItem">
+                    <MenuItem HeaderStringFormat="{}{0} (Alt + S)" Header="Save Viewer Screenshot..." Name="file_saveImageMenuItem" Click="file_saveViewerScreenshotMenuItem_Click" />
+                    <MenuItem HeaderStringFormat="{}{0} (Ctrl + S)" Header="Save Image Slice..." Name="file_saveImageSliceMenuItem" Click="file_saveImageSliceMenuItem_Click" />
+                    <Separator />
+                    <MenuItem Header="Save Slices To Multipage TIFF..." Name="file_saveSlicesToMultipageTiffMenuItem" Click="file_saveSlicesToMultipageTiffMenuItem_Click" />
+                    <Separator />
+                    <MenuItem HeaderStringFormat="{}{0} (Alt + X)" Header="Exit" Name="file_exitMenuItem" Click="file_exitMenuItem_Click" />
+                </MenuItem>
+
+                <MenuItem Header="View" Name="viewMenuItem" SubmenuOpened="viewMenuItem_SubmenuOpened">
+                    <MenuItem HeaderStringFormat="{}{0} (Ctrl + R)" Header="Reset Scene" Name="view_resetSceneMenuItem" Click="view_resetSceneMenuItem_Click" />
+                    <MenuItem HeaderStringFormat="{}{0} (Ctrl + F)" Header="Fit Scene" Name="view_fitSceneMenuItem" Click="view_fitSceneMenuItem_Click" />
+                    <Separator />
+                    <MenuItem HeaderStringFormat="{}{0} (Ctrl + I)" Header="Is Negative" Name="view_negativeImageMenuItem" Click="view_negativeImageMenuItem_Click" />
+                    <MenuItem Header="Reset Window Level" Name="view_resetWindowLevelMenuItem" Click="view_resetWindowLevelMenuItem_Click" />
+                    <MenuItem HeaderStringFormat="{}{0} (Ctrl + W)" Header="Reset To Default Window Level" Name="view_resetToDefaultWindowLevelMenuItem" Click="view_resetToDefaultWindowLevelMenuItem_Click" />
+                    <Separator />
+                    <MenuItem HeaderStringFormat="{}{0} (F9)" Header="Use Interpolation" Name="view_useInterpolationMenuItem" Click="view_useInterpolationMenuItem_Click" IsChecked="True" />
+                    <Separator />
+                    <MenuItem HeaderStringFormat="{}{0} (F5)" Header="Full Screen" Name="view_fullScreenMenuItem" Click="view_fullScreenMenuItem_Click" />
+                    <MenuItem HeaderStringFormat="{}{0} (F6)" Header="Top Panel Always Visible" Name="view_topPanelAlwaysVisibleMenuItem" Click="view_topPanelAlwaysVisibleMenuItem_Click" />
+                    <Separator />
+                    <MenuItem Header="Text Overlay Settings..." Name="view_textOverlaySettingsMenuItem" Click="view_textOverlaySettingsMenuItem_Click" />
+                    <MenuItem HeaderStringFormat="{}{0} (F10)" Header="Show Text Overlay" Name="view_showTextOverlayMenuItem" Click="view_showTextOverlayMenuItem_Click" IsChecked="True"/>
+                    <Separator />
+                    <MenuItem Header="Settings..." Name="view_settingsMenuItem" Click="view_settingsMenuItem_Click" />
+                </MenuItem>                
+            </Menu>
+
+            <ToolBarTray>
+                <CustomConstrols:ImageViewerToolBar
+                Grid.Row="1" 
+                x:Name="imageViewerToolBar" 
+                CanOpenFile="False"
+                CanSaveFile="True"
+                CanNavigate="True"   
+                CanPrint="False"
+                CanChangeSizeMode="False"
+                IsChangeSizeModeEnabled="False"
+                SaveFile="file_saveImageSliceMenuItem_Click"
+                PageIndexChanged="imageViewerToolBar_PageIndexChanged">
+                </CustomConstrols:ImageViewerToolBar>
+
+                <DicomViewerDemoControls:DicomMprToolInteractionModeToolBar
+                Grid.Row="2"
+                x:Name="dicomMprToolInteractionModeToolBar">
+                </DicomViewerDemoControls:DicomMprToolInteractionModeToolBar>
+
+            </ToolBarTray>
+        </StackPanel>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <ImagingControls:WpfImageViewer 
+                 Grid.Column="0"
+                 Margin="0,0,5,0"
+                 Background="Black"
+                 SizeMode="BestFit"
+                 CenterImage="True"
+                 InputGestureCopy="{x:Null}"
+                 InputGestureCut="{x:Null}"
+                 InputGestureDelete="{x:Null}"
+                 InputGestureInsert="{x:Null}"
+                 x:Name="planarSliceImageViewer"/>
+
+            <Separator Grid.Column="0" Width="5" Height="Auto" HorizontalAlignment="Right" />
+            <ImagingControls:WpfImageViewer 
+                 Grid.Column="1"
+                 Margin="0"
+                 Background="Black"
+                 SizeMode="BestFit"
+                 CenterImage="True"
+                 InputGestureCopy="{x:Null}"
+                 InputGestureCut="{x:Null}"
+                 InputGestureDelete="{x:Null}"
+                 InputGestureInsert="{x:Null}"
+                 x:Name="multiSliceImageViewer" />
+
+        </Grid>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="2">
+            <Label Name="statusLabel" Visibility="Collapsed">Label</Label>
+            <ProgressBar Name="progressBar" Visibility="Collapsed" Width="150" Height="23" />
+        </StackPanel>
+    </Grid>
+</Window>

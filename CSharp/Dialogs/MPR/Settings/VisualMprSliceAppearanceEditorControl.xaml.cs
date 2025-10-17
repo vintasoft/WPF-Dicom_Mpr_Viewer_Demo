@@ -68,6 +68,27 @@ namespace WpfDicomMprViewerDemo
             }
         }
 
+        bool _showPerpendicularMultiSliceSettings = false;
+        /// <summary>
+        /// Gets or set a value indicating whether the control should show settings for perpendicular multi slice.
+        /// </summary>
+        /// <value>
+        /// <b>True</b> - the control should show settings for perpendicular multi slice;
+        /// <b>false</b> - the control should NOT show settings for perpendicular multi slice.
+        /// </value>
+        public bool ShowPerpendicularMultiSliceSettings
+        {
+            get
+            {
+                return _showPerpendicularMultiSliceSettings;
+            }
+            set
+            {
+                _showPerpendicularMultiSliceSettings = value;
+                UpdateUI();
+            }
+        }
+
         #endregion
 
 
@@ -96,10 +117,13 @@ namespace WpfDicomMprViewerDemo
             {
                 sliceColorPanelControl.Color = SliceSettings.SliceColor;
                 sliceLineWidthNumericUpDown.Value = (double)SliceSettings.SliceLineWidth;
+                focusedSliceColorPanelControl.Color = SliceSettings.FocusedSliceColor;
+                focusedSliceLineWidthNumericUpDown.Value = (double)SliceSettings.FocusedSliceLineWidth;
                 markerPointDiameterNumericUpDown.Value = (double)SliceSettings.MarkerPointDiameter;
                 thicknessNumericUpDown.Value = (double)SliceSettings.Thickness;
-                renderingModeComboBox.SelectedItem = SliceSettings.RederingMode;
+                renderingModeComboBox.SelectedItem = SliceSettings.RenderingMode;
                 curveTensionNumericUpDown.Value = SliceSettings.CurveTension;
+                sliceCountNumericUpDown.Value = SliceSettings.SliceCount;
             }
 
             if ((MprSliceRenderingMode)renderingModeComboBox.SelectedItem == MprSliceRenderingMode.MPR)
@@ -113,13 +137,26 @@ namespace WpfDicomMprViewerDemo
 
             if (ShowCurvilinearSliceSettings)
             {
-                curveTensionLabel.Visibility = Visibility.Visible;
-                curveTensionNumericUpDown.Visibility = Visibility.Visible;
+                curveTensionLabel.IsEnabled = true;
+                curveTensionNumericUpDown.IsEnabled = true;
             }
             else
             {
-                curveTensionNumericUpDown.Visibility = Visibility.Hidden;
-                curveTensionLabel.Visibility = Visibility.Hidden;
+                curveTensionNumericUpDown.IsEnabled = false;
+                curveTensionLabel.IsEnabled = false;
+            }
+
+            if (ShowPerpendicularMultiSliceSettings)
+            {
+                sliceCountNumericUpDown.IsEnabled = true;
+                focusedSliceColorPanelControl.IsEnabled = true;
+                focusedSliceLineWidthNumericUpDown.IsEnabled = true;
+            }
+            else
+            {
+                sliceCountNumericUpDown.IsEnabled = false;
+                focusedSliceColorPanelControl.IsEnabled = false;
+                focusedSliceLineWidthNumericUpDown.IsEnabled = false;
             }
 
         }
@@ -140,6 +177,24 @@ namespace WpfDicomMprViewerDemo
         {
             if (SliceSettings != null)
                 SliceSettings.SliceLineWidth = (float)sliceLineWidthNumericUpDown.Value;
+        }
+
+        /// <summary>
+        /// Slice color is changed.
+        /// </summary>
+        private void focusedSliceColorPanelControl_ColorChanged(object sender, EventArgs e)
+        {
+            if (SliceSettings != null)
+                SliceSettings.FocusedSliceColor = focusedSliceColorPanelControl.Color;
+        }
+
+        /// <summary>
+        /// Slice line width is changed.
+        /// </summary>
+        private void focusedSliceLineWidthNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            if (SliceSettings != null)
+                SliceSettings.FocusedSliceLineWidth = (float)focusedSliceLineWidthNumericUpDown.Value;
         }
 
         /// <summary>
@@ -167,9 +222,9 @@ namespace WpfDicomMprViewerDemo
         {
             if (SliceSettings != null)
             {
-                SliceSettings.RederingMode = (MprSliceRenderingMode)renderingModeComboBox.SelectedItem;
+                SliceSettings.RenderingMode = (MprSliceRenderingMode)renderingModeComboBox.SelectedItem;
 
-                if (SliceSettings.RederingMode == MprSliceRenderingMode.MPR)
+                if (SliceSettings.RenderingMode == MprSliceRenderingMode.MPR)
                     thicknessNumericUpDown.IsEnabled = false;
                 else
                     thicknessNumericUpDown.IsEnabled = true;
@@ -184,6 +239,17 @@ namespace WpfDicomMprViewerDemo
             if (SliceSettings != null)
             {
                 SliceSettings.CurveTension = curveTensionNumericUpDown.Value;
+            }
+        }
+
+        /// <summary>
+        /// Handles the ValueChanged event of sliceCountNumericUpDown object.
+        /// </summary>
+        private void sliceCountNumericUpDown_ValueChanged(object sender, EventArgs e)
+        {
+            if (SliceSettings != null)
+            {
+                SliceSettings.SliceCount = (int)sliceCountNumericUpDown.Value;
             }
         }
 

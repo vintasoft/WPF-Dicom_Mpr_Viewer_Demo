@@ -64,6 +64,9 @@
                     <MenuItem HeaderStringFormat="{}{0} (Ctrl + S)" Header="Save Image Slice..." Name="file_saveImageSliceMenuItem" Click="file_saveImageSliceMenuItem_Click" />
                     <MenuItem HeaderStringFormat="{}{0} (Ctrl + Shift + S)" Header="Save All Images Slices..." Name="file_saveAllImagesSlicesMenuItem" Click="file_saveAllImagesSlicesMenuItem_Click" />
                     <Separator />
+                    <MenuItem Header="Save Perpendicular Multi Slice Image..." Name="savePerpendicularMultiSliceImageMenuItem" Click="savePerpendicularMultiSliceImageMenuItem_Click" />
+                    <MenuItem Header="Save Perpendicular Multi Slice Images..." Name="savePerpendicularMultiSliceImagesMenuItem" Click="savePerpendicularMultiSliceImagesMenuItem_Click" />
+                    <Separator />
                     <MenuItem HeaderStringFormat="{}{0} (Ctrl + C)" Header="Copy Image Slice To Clipboard" Name="file_copyImageSliceToClipboardMenuItem" Click="file_copyImageSliceToClipboardMenuItem_Click" />
                     <Separator />
                     <MenuItem HeaderStringFormat="{}{0} (Alt + X)" Header="Exit" Name="file_exitMenuItem" Click="file_exitMenuItem_Click" />
@@ -96,6 +99,8 @@
 
                 <MenuItem Header="Slice" Name="sliceMenuItem">
                     <MenuItem Header="Build" Name="slice_buildMenuItem" Click="slice_buildMenuItem_Click" />
+                    <MenuItem Header="Create Perpendicular Multi Slice" Name="slice_createPerpendicularMultiSliceMenuItem" Click="slice_createPerpendicularMultiSliceMenuItem_Click" />
+                    <MenuItem Header="Perpendicular Multi Slice Properties..." Name="perpendicularMultiSlicePropertiesMenuItem" IsEnabled="False" Click="perpendicularMultiSlicePropertiesMenuItem_Click" />
                 </MenuItem>
             </Menu>
 
@@ -139,8 +144,14 @@
 
             <GridSplitter Grid.Column="1" Width="5" Height="Auto" HorizontalAlignment="Stretch" ResizeDirection="Columns"/>
 
-            <ImagingControls:WpfImageViewer 
-                    Grid.Column="2"
+            <Grid Grid.Column="2" x:Name="splitedGrid">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <ImagingControls:WpfImageViewer 
+                    Grid.Row="0"
                     Margin="0"
                     Background="Black"
                     SizeMode="BestFit"
@@ -149,7 +160,24 @@
                     InputGestureCut="{x:Null}"
                     InputGestureDelete="{x:Null}"
                     InputGestureInsert="{x:Null}"
-                    x:Name="curvilinearSliceImageViewer" />
+                    x:Name="curvilinearSliceImageViewer"
+                    Padding="0,0,0,5"/>
+
+                <GridSplitter x:Name="gridSpliter" Grid.Row="0" VerticalAlignment="Bottom" Width="Auto" Height="5" HorizontalAlignment="Stretch" ResizeDirection="Rows"/>
+
+                <ImagingControls:WpfImageViewer 
+                    Grid.Row="2"
+                    Margin="0"
+                    Background="Black"
+                    SizeMode="BestFit"
+                    CenterImage="True"
+                    InputGestureCopy="{x:Null}"
+                    InputGestureCut="{x:Null}"
+                    InputGestureDelete="{x:Null}"
+                    InputGestureInsert="{x:Null}"
+                    x:Name="perpendicularMultiSliceImageViewer" />
+            </Grid>
+
 
         </Grid>
     </Grid>

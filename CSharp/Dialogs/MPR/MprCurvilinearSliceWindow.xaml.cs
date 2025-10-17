@@ -19,6 +19,7 @@ using Vintasoft.Imaging.Wpf;
 using Vintasoft.Imaging.Wpf.UI;
 using Vintasoft.Imaging.Wpf.UI.VisualTools;
 using Vintasoft.Imaging.Wpf.UI.VisualTools.UserInteraction;
+using Vintasoft.Primitives;
 
 using WpfDemosCommonCode;
 using WpfDemosCommonCode.Imaging;
@@ -101,6 +102,25 @@ namespace WpfDicomMprViewerDemo
         #endregion
 
 
+        #region Perpendicular multislice
+
+        /// <summary>
+        /// The DicomMprTool for perpendicular multi slice.
+        /// </summary>
+        WpfDicomMprTool _perpendicularMultiSliceDicomMprTool;
+
+        /// <summary>
+        /// The current perpendicular multi slice.
+        /// </summary>
+        MprPerpendicularMultiSlice _perpendicularMultiSlice;
+
+        /// <summary>
+        /// The default state of perpendicular multi slice.
+        /// </summary>
+        MprSlice _defaultPerpendicularMultiSlice;
+
+        #endregion
+
         /// <summary>
         /// The default VOI LUT for planar and curvilinear slices.
         /// </summary>
@@ -181,7 +201,7 @@ namespace WpfDicomMprViewerDemo
 
             // create visualization controller
             _visualizationController = new WpfMprVisualizationController(
-                mprImage, planarSliceImageViewer, curvilinearSliceImageViewer);
+                mprImage, planarSliceImageViewer, curvilinearSliceImageViewer, perpendicularMultiSliceImageViewer);
 
             _imageToolAppearanceSettings.SetMprVisualizationControllerSettings(_visualizationController);
 
@@ -195,9 +215,10 @@ namespace WpfDicomMprViewerDemo
             // create DicomMprTool
             CreatePlanarSliceDicomMprTool(isNegativeImage);
             CreateCurvilinearSliceDicomMprTool(isNegativeImage);
+            CreatePerpendicularMultiSliceDicomMprTool(isNegativeImage);
 
             dicomMprToolInteractionModeToolBar.DicomMprTools = new WpfDicomMprTool[] {
-                _planarSliceDicomMprTool, _curvilinearSliceDicomMprTool };
+                _planarSliceDicomMprTool, _curvilinearSliceDicomMprTool, _perpendicularMultiSliceDicomMprTool };
             view_negativeImageMenuItem.IsChecked = isNegativeImage;
             _planarSliceDicomMprTool.MprImageTool.AllowRotate3D = false;
             _planarSliceDicomMprTool.MprImageTool.ScrollProperties.Anchor = AnchorType.Left;
@@ -238,6 +259,9 @@ namespace WpfDicomMprViewerDemo
 
             planarSliceImageViewer.GotFocus += new RoutedEventHandler(ImageViewer_GotFocus);
             curvilinearSliceImageViewer.GotFocus += new RoutedEventHandler(ImageViewer_GotFocus);
+            perpendicularMultiSliceImageViewer.GotFocus += new RoutedEventHandler(ImageViewer_GotFocus);
+
+            UpdatePerpendicualrMultiSliceImageViewerVisibility(false);
 
             planarSliceImageViewer.Focus();
 
@@ -370,6 +394,103 @@ namespace WpfDicomMprViewerDemo
         private void file_saveImageSliceMenuItem_Click(object sender, RoutedEventArgs e)
         {
             SaveFocusedSliceImage();
+        }
+
+
+        /// <summary>
+        /// Handles the Click event of savePerpendicularMultiSliceImageMenuItem object.
+        /// </summary>
+        private void savePerpendicularMultiSliceImageMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (_perpendicularMultiSlice == null)
+                return;
+
+            MprPerpendicualrMultiSliceColumnCountWindow columnCountWindow = new MprPerpendicualrMultiSliceColumnCountWindow();
+            columnCountWindow.Owner = this;
+            columnCountWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            columnCountWindow.ColumnCount = _perpendicularMultiSlice.ActualColumnCount;
+
+            if (columnCountWindow.ShowDialog() == true)
+            {
+                // create command for change VOI LUT
+                ApplyDicomImageVoiLutCommand command = _curvilinearSliceDicomMprTool.DicomViewerTool.CreateApplyDicomImageVoiLutCommand();
+                command.OutputPixelFormat = DicomImagePixelFormat.Gray16;
+
+                // get slice
+                MprPerpendicularMultiSlice slice = (MprPerpendicularMultiSlice)_perpendicularMultiSlice.CreateCopy();
+                slice.SetWidth(columnCountWindow.ColumnCount);
+                slice.FitHeight();
+
+                // get planar slice image
+                MprImageSlice imageSlice = _curvilinearSliceDicomMprTool.MprImageTool.MprImage.RenderSlice(slice);
+                // get image
+                bool disposeAfterUse;
+                VintasoftImage image = imageSlice.GetImage(out disposeAfterUse);
+                try
+                {
+                    // change VOI LUT and save image
+                    using (VintasoftImage imageWithVoiLut = command.Execute(image))
+                    {
+                        // save image to a file
+                        SaveImageFileWindow.SaveImageToFile(imageWithVoiLut, ImagingEncoderFactory.Default);
+                    }
+                }
+                finally
+                {
+                    if (disposeAfterUse)
+                        image.Dispose();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Handles the Click event of savePerpendicularMultiSliceImagesMenuItem object.
+        /// </summary>
+        private void savePerpendicularMultiSliceImagesMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (_perpendicularMultiSlice == null)
+                return;
+
+            // create a temporary image collection
+            using (ImageCollection images = new ImageCollection())
+            {
+                try
+                {
+                    // create a command to change the VOI LUT
+                    ApplyDicomImageVoiLutCommand command = _curvilinearSliceDicomMprTool.DicomViewerTool.CreateApplyDicomImageVoiLutCommand();
+                    command.OutputPixelFormat = DicomImagePixelFormat.Gray16;
+
+                    // add slice images
+                    for (int sliceIndex = _perpendicularMultiSlice.SliceStartIndex; sliceIndex <= _perpendicularMultiSlice.SliceEndIndex; sliceIndex++)
+                    {
+                        // get planar slice
+                        MprPlanarSlice planarSlice = _perpendicularMultiSlice.GetPlanarSlice(sliceIndex);
+
+                        // get planar slice image
+                        MprImageSlice imageSlice = _curvilinearSliceDicomMprTool.MprImageTool.MprImage.RenderSlice(planarSlice);
+                        // get image
+                        bool disposeAfterUse;
+                        VintasoftImage image = imageSlice.GetImage(out disposeAfterUse);
+                        try
+                        {
+                            // change VOI LUT and save image
+                            images.Add(command.Execute(image));
+                        }
+                        finally
+                        {
+                            if (disposeAfterUse)
+                                image.Dispose();
+                        }
+                    }
+
+                    // save images to a file
+                    SaveImageFileWindow.SaveImagesToFile(images, ImagingEncoderFactory.Default);
+                }
+                finally
+                {
+                    images.ClearAndDisposeItems();
+                }
+            }
         }
 
         /// <summary>
@@ -505,6 +626,8 @@ namespace WpfDicomMprViewerDemo
                 view_negativeImageMenuItem.IsChecked;
             _curvilinearSliceDicomMprTool.DicomViewerTool.IsImageNegative =
                 view_negativeImageMenuItem.IsChecked;
+            _perpendicularMultiSliceDicomMprTool.DicomViewerTool.IsImageNegative =
+                view_negativeImageMenuItem.IsChecked;
         }
 
         /// <summary>
@@ -514,6 +637,7 @@ namespace WpfDicomMprViewerDemo
         {
             _planarSliceDicomMprTool.DicomViewerTool.DicomImageVoiLut = _defaultVoiLut;
             _curvilinearSliceDicomMprTool.DicomViewerTool.DicomImageVoiLut = _defaultVoiLut;
+            _perpendicularMultiSliceDicomMprTool.DicomViewerTool.DicomImageVoiLut = _defaultVoiLut;
         }
 
         /// <summary>
@@ -525,6 +649,8 @@ namespace WpfDicomMprViewerDemo
                 _planarSliceDicomMprTool.DicomViewerTool.DefaultDicomImageVoiLut;
             _curvilinearSliceDicomMprTool.DicomViewerTool.DicomImageVoiLut =
                 _curvilinearSliceDicomMprTool.DicomViewerTool.DefaultDicomImageVoiLut;
+            _perpendicularMultiSliceDicomMprTool.DicomViewerTool.DicomImageVoiLut =
+                _perpendicularMultiSliceDicomMprTool.DicomViewerTool.DefaultDicomImageVoiLut;
         }
 
         /// <summary>
@@ -544,6 +670,11 @@ namespace WpfDicomMprViewerDemo
                 _curvilinearSliceDicomMprTool.TextOverlay.Find<WpfDicomImageVoiLutTextOverlay>();
             if (curvilinearSliceVoiLutTextOverlay != null)
                 curvilinearSliceVoiLutTextOverlay.IsVisible = value;
+
+            WpfDicomImageVoiLutTextOverlay perpendicularSliceVoiLutTextOverlay =
+                _perpendicularMultiSliceDicomMprTool.TextOverlay.Find<WpfDicomImageVoiLutTextOverlay>();
+            if (perpendicularSliceVoiLutTextOverlay != null)
+                perpendicularSliceVoiLutTextOverlay.IsVisible = value;
         }
 
         /// <summary>
@@ -596,6 +727,7 @@ namespace WpfDicomMprViewerDemo
                 // disable all MPR image tools
                 _planarSliceDicomMprTool.MprImageTool.Enabled = false;
                 _curvilinearSliceDicomMprTool.MprImageTool.Enabled = false;
+                _perpendicularMultiSliceDicomMprTool.MprImageTool.Enabled = false;
             }
             else
             {
@@ -678,6 +810,7 @@ namespace WpfDicomMprViewerDemo
                 // disable interpolation
                 _planarSliceDicomMprTool.MprImageTool.RenderingInterpolationMode = MprInterpolationMode.NearestNeighbor;
                 _curvilinearSliceDicomMprTool.MprImageTool.RenderingInterpolationMode = MprInterpolationMode.NearestNeighbor;
+                _perpendicularMultiSliceDicomMprTool.MprImageTool.RenderingInterpolationMode = MprInterpolationMode.NearestNeighbor;
             }
             // if interpolation is disabled
             else
@@ -685,6 +818,7 @@ namespace WpfDicomMprViewerDemo
                 // enable interpolation
                 _planarSliceDicomMprTool.MprImageTool.RenderingInterpolationMode = MprInterpolationMode.Linear;
                 _curvilinearSliceDicomMprTool.MprImageTool.RenderingInterpolationMode = MprInterpolationMode.Linear;
+                _perpendicularMultiSliceDicomMprTool.MprImageTool.RenderingInterpolationMode = MprInterpolationMode.Linear;
             }
 
             view_useInterpolationMenuItem.IsChecked = !isInterpolationEnabled;
@@ -732,6 +866,13 @@ namespace WpfDicomMprViewerDemo
 
             DicomOverlaySettingEditorWindow.SetTextOverlay(OVERLAY_OWNER_NAME, _planarSliceDicomMprTool);
             DicomOverlaySettingEditorWindow.SetTextOverlay(OVERLAY_OWNER_NAME, _curvilinearSliceDicomMprTool);
+            DicomOverlaySettingEditorWindow.SetTextOverlay(OVERLAY_OWNER_NAME, _perpendicularMultiSliceDicomMprTool);
+
+            foreach (WpfTextOverlay textOverlay in _perpendicularMultiSliceDicomMprTool.TextOverlay.ToArray())
+            {
+                if (textOverlay is WpfMprSliceOrientationTextOverlay)
+                    _perpendicularMultiSliceDicomMprTool.TextOverlay.Remove(textOverlay);
+            }
         }
 
         /// <summary>
@@ -744,9 +885,12 @@ namespace WpfDicomMprViewerDemo
             if (curvilinearSliceImageViewer.IsFocused)
                 selectedSliceType = SliceType.Curvilinear;
 
+            if (perpendicularMultiSliceImageViewer.IsFocused)
+                selectedSliceType = SliceType.Multi;
+
             MprImageToolAppearanceSettingsWindow dialog = new MprImageToolAppearanceSettingsWindow(
                  _imageToolAppearanceSettings, selectedSliceType,
-                 _sliceType, SliceType.Curvilinear);
+                 _sliceType, SliceType.Curvilinear, SliceType.Multi);
 
             dialog.Owner = this;
             dialog.ShowDialog();
@@ -765,6 +909,62 @@ namespace WpfDicomMprViewerDemo
         private void slice_buildMenuItem_Click(object sender, RoutedEventArgs e)
         {
             StartBuildCurvilinearSlice();
+        }
+
+        /// <summary>
+        /// Handles the createPerpendicularMultiSliceMenuItem_Click event of slice object.
+        /// </summary>
+        private void slice_createPerpendicularMultiSliceMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            if (_currentCurvilinearSlice == null)
+                return;
+
+            RemovePerpendicualMultiSlice();
+
+            UpdatePerpendicualrMultiSliceImageViewerVisibility(true);
+
+            // create multi slice
+            _perpendicularMultiSlice = new MprPerpendicularMultiSlice(_currentCurvilinearSlice);
+            _perpendicularMultiSlice.SliceViewRect = new VintasoftRect(0.25, 0.15, 0.5, 0.7);
+            _perpendicularMultiSlice.SliceDepth = _currentCurvilinearSlice.Height * 0.3;
+            _perpendicularMultiSlice.SetWidth(4);
+            _perpendicularMultiSlice.FitHeight();
+
+            WpfMprSliceVisualizer visualMultiSlice = new WpfMprSliceVisualizer(_perpendicularMultiSlice, Colors.Magenta, Colors.Aqua);
+            _imageToolAppearanceSettings.SetSliceSettings(SliceType.Multi, visualMultiSlice);
+
+            // create multi slice view
+            WpfMprPerpendicularMultiSliceView multiSliceView = new WpfMprPerpendicularMultiSliceView(visualMultiSlice);
+            // add multi slice view
+            _perpendicularMultiSliceDicomMprTool.MprImageTool.MprSliceViewCollection.Add(multiSliceView);
+
+            // show slice in viewer
+            _visualizationController.ShowSliceInViewer(perpendicularMultiSliceImageViewer, _perpendicularMultiSlice);
+
+            _perpendicularMultiSliceDicomMprTool.MprImageTool.FitScene();
+
+            savePerpendicularMultiSliceImageMenuItem.IsEnabled = true;
+            savePerpendicularMultiSliceImagesMenuItem.IsEnabled = true;
+            perpendicularMultiSlicePropertiesMenuItem.IsEnabled = true;
+
+
+            WpfImageViewer[] viewers = new WpfImageViewer[] {
+                planarSliceImageViewer,
+                curvilinearSliceImageViewer,
+                perpendicularMultiSliceImageViewer};
+
+            foreach (WpfImageViewer viewer in viewers)
+            {
+                // get MPR tool
+                WpfDicomMprTool mprTool = _visualizationController.GetDicomMprToolAssociatedWithImageViewer(viewer);
+
+                // find slice view
+                WpfMprPerpendicularMultiSliceView sliceView =
+                    mprTool.MprImageTool.FindSliceView(_perpendicularMultiSlice) as WpfMprPerpendicularMultiSliceView;
+
+                if (sliceView != null)
+                    sliceView.HoveredSliceIndexChanged += MultiSliceView_HoveredSliceIndexChanged;
+            }
         }
 
         #endregion
@@ -906,6 +1106,8 @@ namespace WpfDicomMprViewerDemo
             // if curvilinear slice is created
             if (_currentCurvilinearSlice != null)
                 _imageToolAppearanceSettings.SetCurvilinearSliceSettings(_visualizationController.GetVisualMprSliceAssociatedWithMprSlice(_currentCurvilinearSlice));
+            if (_perpendicularMultiSlice != null)
+                _imageToolAppearanceSettings.SetPerpendicularMultiSliceSettings(_visualizationController.GetVisualMprSliceAssociatedWithMprSlice(_perpendicularMultiSlice));
 
             // update default slices
             _defaultPlanarSlice.Thickness = _currentPlanarSlice.Thickness;
@@ -919,6 +1121,7 @@ namespace WpfDicomMprViewerDemo
             // update MPR tools
             _imageToolAppearanceSettings.SetMprToolSettings(_planarSliceDicomMprTool.MprImageTool);
             _imageToolAppearanceSettings.SetMprToolSettings(_curvilinearSliceDicomMprTool.MprImageTool);
+            _imageToolAppearanceSettings.SetMprToolSettings(_perpendicularMultiSliceDicomMprTool.MprImageTool);
         }
 
         #endregion
@@ -936,13 +1139,15 @@ namespace WpfDicomMprViewerDemo
             {
                 DicomImageVoiLookupTable newVoiLut = new DicomImageVoiLookupTable(e.WindowCenter, e.WindowWidth);
 
-                if (sender == _curvilinearSliceDicomMprTool)
+                WpfDicomMprTool[] tools = new WpfDicomMprTool[] {
+                    _planarSliceDicomMprTool,
+                    _curvilinearSliceDicomMprTool,
+                    _perpendicularMultiSliceDicomMprTool };
+
+                foreach (WpfDicomMprTool tool in tools)
                 {
-                    _planarSliceDicomMprTool.DicomViewerTool.DicomImageVoiLut = newVoiLut;
-                }
-                else
-                {
-                    _curvilinearSliceDicomMprTool.DicomViewerTool.DicomImageVoiLut = newVoiLut;
+                    if (!Equals(tool.DicomViewerTool.DicomImageVoiLut, newVoiLut))
+                        tool.DicomViewerTool.DicomImageVoiLut = newVoiLut;
                 }
             }
         }
@@ -1034,6 +1239,8 @@ namespace WpfDicomMprViewerDemo
                 _visualizationController.RemoveSliceVisualization(
                     _curvilinearSliceDicomMprTool.MprImageTool.FocusedSlice);
             }
+
+            RemovePerpendicualMultiSlice();
 
             // create curvilinear slice
             MprCurvilinearSlice curvilinearSlice =
@@ -1291,6 +1498,42 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
+        /// Removes the perpendicual multi slice.
+        /// </summary>
+        private void RemovePerpendicualMultiSlice()
+        {
+            // if previous perpendicular multi slice must be removed
+            if (_perpendicularMultiSliceDicomMprTool.MprImageTool.FocusedSlice != null)
+            {
+                // remove previous perpendicular multi slice
+                _visualizationController.RemoveSliceVisualization(
+                    _perpendicularMultiSliceDicomMprTool.MprImageTool.FocusedSlice);
+            }
+
+            UpdatePerpendicualrMultiSliceImageViewerVisibility(false);
+            perpendicularMultiSlicePropertiesMenuItem.IsEnabled = false;
+            savePerpendicularMultiSliceImageMenuItem.IsEnabled = false;
+            savePerpendicularMultiSliceImagesMenuItem.IsEnabled = false;
+        }
+
+        private void UpdatePerpendicualrMultiSliceImageViewerVisibility(bool isVisible)
+        {
+            if (isVisible)
+            {
+                splitedGrid.RowDefinitions[1].Height = new GridLength(1, GridUnitType.Star);
+                //gridSpliter.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                splitedGrid.RowDefinitions[1].Height = new GridLength(0);
+                //gridSpliter.Visibility = Visibility.Collapsed;
+            }
+
+            //splitedGrid.UpdateLayout();
+            splitedGrid.InvalidateVisual();
+        }
+
+        /// <summary>
         /// Creates the <see cref="WpfDicomMprTool"/> for the planar slice.
         /// </summary>
         /// <param name="isNegativeImage">The value indicating whether the image must be inverted.</param>
@@ -1330,6 +1573,56 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
+        /// Creates the <see cref="WpfDicomMprTool"/> for the perpendicular multi slice.
+        /// </summary>
+        /// <param name="isNegativeImage">The value indicating whether the image must be inverted.</param>
+        private void CreatePerpendicularMultiSliceDicomMprTool(bool isNegativeImage)
+        {
+            _perpendicularMultiSliceDicomMprTool = _visualizationController.GetDicomMprToolAssociatedWithImageViewer(
+                perpendicularMultiSliceImageViewer);
+            _perpendicularMultiSliceDicomMprTool.DicomViewerTool.DicomImageVoiLut = _defaultVoiLut;
+            _perpendicularMultiSliceDicomMprTool.DicomViewerTool.IsImageNegative = isNegativeImage;
+            _perpendicularMultiSliceDicomMprTool.DicomViewerTool.DicomImageVoiLutChanged +=
+                new EventHandler<WpfVoiLutChangedEventArgs>(DicomViewerTool_DicomImageVoiLutChanged);
+
+            _perpendicularMultiSliceDicomMprTool.MprImageTool.AllowRotate3D = false;
+
+            perpendicularMultiSliceImageViewer.FocusedIndexChanged += PerpendicularMultiSliceImageViewer_FocusedIndexChanged;
+
+            foreach (WpfTextOverlay textOverlay in _perpendicularMultiSliceDicomMprTool.TextOverlay.ToArray())
+            {
+                if (textOverlay is WpfMprSliceOrientationTextOverlay)
+                    _perpendicularMultiSliceDicomMprTool.TextOverlay.Remove(textOverlay);
+            }
+        }
+
+        /// <summary>
+        /// Handles the FocusedIndexChanged event of PerpendicularMultiSliceImageViewer object.
+        /// </summary>
+        private void PerpendicularMultiSliceImageViewer_FocusedIndexChanged(object sender, PropertyChangedEventArgs<int> e)
+        {
+            _perpendicularMultiSliceDicomMprTool.MprImageTool.FitScene();
+
+            perpendicularMultiSliceImageViewer.FocusedIndexChanged -= PerpendicularMultiSliceImageViewer_FocusedIndexChanged;
+        }
+
+        /// <summary>
+        /// Handles the Click event of perpendicularMultiSlicePropertiesMenuItem object.
+        /// </summary>
+        private void perpendicularMultiSlicePropertiesMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
+            PropertyGridWindow window = new PropertyGridWindow(_perpendicularMultiSlice, "Perpendicular Multi Slice");
+            window.Owner = this;
+            window.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+
+            window.ShowDialog();
+
+            _imageToolAppearanceSettings.PerpendicularMultiSliceAppearance.Update(
+                _visualizationController.GetVisualMprSliceAssociatedWithMprSlice(_perpendicularMultiSlice));
+        }
+
+        /// <summary>
         /// The window is loaded.
         /// </summary>
         private void MprCurvilinearSliceWindow_Loaded(object sender, RoutedEventArgs e)
@@ -1338,6 +1631,18 @@ namespace WpfDicomMprViewerDemo
             _visualizationController.ShowSliceInViewer(planarSliceImageViewer, _currentPlanarSlice);
 
             StartBuildCurvilinearSlice();
+        }
+
+        /// <summary>
+        /// Handles the HoveredSliceIndexChanged event of MultiSliceView object.
+        /// </summary>
+        private void MultiSliceView_HoveredSliceIndexChanged(object sender, EventArgs e)
+        {
+            WpfMprPerpendicularMultiSliceView view = (WpfMprPerpendicularMultiSliceView)sender;
+
+            MprPerpendicularMultiSlice slice = (MprPerpendicularMultiSlice)view.MprSliceVisualizer.Slice;
+
+            slice.FocusedSliceIndex = view.HoveredSliceIndex;
         }
 
         #endregion

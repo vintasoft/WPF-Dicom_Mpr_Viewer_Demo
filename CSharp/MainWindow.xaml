@@ -183,7 +183,7 @@
         <KeyBinding Command="{x:Static cc:MainWindow._fullScreenCommand}" Key="F5" />
         <KeyBinding Command="{x:Static cc:MainWindow._topPanelAlwaysVisibleCommand}" Key="F6" />
         <KeyBinding Command="{x:Static cc:MainWindow._showTextOverlayCommand}" Key="F10" />
-        
+
         <!--'Help' menu-->
         <KeyBinding Command="{x:Static cc:MainWindow._aboutCommand}"  Key="F1" />
     </Window.InputBindings>
@@ -243,10 +243,16 @@
                 </MenuItem>
 
                 <MenuItem Header="MPR" Name="mprMenuItem">
-                    <MenuItem Header="Sagittal..." Name="sagittalMenuItem" Click="sagittalMenuItem_Click"/>
-                    <MenuItem Header="Coronal..." Name="coronalMenuItem" Click="coronalMenuItem_Click"/>
-                    <MenuItem Header="Axial..." Name="axialMenuItem" Click="axialMenuItem_Click"/>
-                    <Separator/>
+                    <MenuItem Header="Planar Slice">
+                        <MenuItem Header="Sagittal..." Name="sagittalMenuItem" Click="sagittalMenuItem_Click"/>
+                        <MenuItem Header="Coronal..." Name="coronalMenuItem" Click="coronalMenuItem_Click"/>
+                        <MenuItem Header="Axial..." Name="axialMenuItem" Click="axialMenuItem_Click"/>
+                    </MenuItem>
+                    <MenuItem Header="Multi slice" Name="mpr_multiSliceMenuItem">
+                        <MenuItem Header="On Sagittal..." Name="multiSliceOnSagittalMenuItem" Click="multiSliceOnSagittalMenuItem_Click"/>
+                        <MenuItem Header="On Coronal..." Name="multiSliceOnCoronalMenuItem" Click="multiSliceOnCoronalMenuItem_Click"/>
+                        <MenuItem Header="On Axial..." Name="multiSliceOnAxialMenuItem" Click="multiSliceOnAxialMenuItem_Click"/>
+                    </MenuItem>
                     <MenuItem Header="Curved MPR" Name="mpr_сurvilinearSliceMenuItem">
                         <MenuItem Header="On Sagittal..." Name="curvilinearSliceOnSagittalMenuItem" Click="curvilinearSliceOnSagittalMenuItem_Click"/>
                         <MenuItem Header="On Coronal..." Name="curvilinearSliceOnCoronalMenuItem" Click="curvilinearSliceOnCoronalMenuItem_Click"/>
@@ -254,6 +260,7 @@
                     </MenuItem>
                     <Separator/>
                     <MenuItem Header="MPR Image Properties..." Name="imagePropertiesMenuItem" Click="ImagePropertiesMenuItem_Click"/>
+                    <MenuItem Header="Perpendicular Multi Slice Default Settings..." Name="perpendicularMultiSliceDefaultSettingsMenuItem" Click="perpendicularMultiSliceDefaultSettingsMenuItem_Click" />
                 </MenuItem>
 
                 <MenuItem Header="Help" Name="helpMenuItem">
@@ -299,7 +306,7 @@
             <vsdui:WpfDicomSeriesManagerControl Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" x:Name="dicomSeriesManagerControl1" />
 
             <GridSplitter Grid.Column="1" Width="5" Height="Auto" HorizontalAlignment="Stretch" ResizeDirection="Columns" />
-            
+
             <ImagingControls:WpfImageViewer 
                 Grid.Row="0" Grid.RowSpan="3" Grid.Column="2"
                 Margin="0"
