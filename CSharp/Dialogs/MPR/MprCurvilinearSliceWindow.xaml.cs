@@ -904,11 +904,19 @@ namespace WpfDicomMprViewerDemo
         #region 'Slice' menu
 
         /// <summary>
-        /// Starts the building of curvilinear slice.
+        /// Handles the build_byPointsMenuItem_Click event of slice object.
         /// </summary>
-        private void slice_buildMenuItem_Click(object sender, RoutedEventArgs e)
+        private void slice_build_byPointsMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            StartBuildCurvilinearSlice();
+            StartBuildCurvilinearSlice(false);
+        }
+
+        /// <summary>
+        /// Handles the build_freehandMenuItem_Click event of slice object.
+        /// </summary>
+        private void slice_build_freehandMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            StartBuildCurvilinearSlice(true);
         }
 
         /// <summary>
@@ -920,6 +928,8 @@ namespace WpfDicomMprViewerDemo
                 return;
 
             RemovePerpendicualMultiSlice();
+
+            showHidePerpendicularMultiSliceMenuItem.IsChecked = true;
 
             UpdatePerpendicualrMultiSliceImageViewerVisibility(true);
 
@@ -946,6 +956,7 @@ namespace WpfDicomMprViewerDemo
             savePerpendicularMultiSliceImageMenuItem.IsEnabled = true;
             savePerpendicularMultiSliceImagesMenuItem.IsEnabled = true;
             perpendicularMultiSlicePropertiesMenuItem.IsEnabled = true;
+            showHidePerpendicularMultiSliceMenuItem.IsEnabled = true;
 
 
             WpfImageViewer[] viewers = new WpfImageViewer[] {
@@ -964,6 +975,34 @@ namespace WpfDicomMprViewerDemo
 
                 if (sliceView != null)
                     sliceView.HoveredSliceIndexChanged += MultiSliceView_HoveredSliceIndexChanged;
+            }
+        }
+
+        /// <summary>
+        /// Handles the Click event of showHidePerpendicularMultiSliceMenuItem object.
+        /// </summary>
+        private void showHidePerpendicularMultiSliceMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            showHidePerpendicularMultiSliceMenuItem.IsChecked ^= true;
+
+            UpdatePerpendicualrMultiSliceImageViewerVisibility(showHidePerpendicularMultiSliceMenuItem.IsChecked);
+
+            WpfImageViewer[] viewers = new WpfImageViewer[] {
+                planarSliceImageViewer,
+                curvilinearSliceImageViewer,
+                perpendicularMultiSliceImageViewer};
+
+            foreach (WpfImageViewer viewer in viewers)
+            {
+                // get MPR tool
+                WpfDicomMprTool mprTool = _visualizationController.GetDicomMprToolAssociatedWithImageViewer(viewer);
+
+                // find slice view
+                WpfMprPerpendicularMultiSliceView sliceView =
+                    mprTool.MprImageTool.FindSliceView(_perpendicularMultiSlice) as WpfMprPerpendicularMultiSliceView;
+
+                if (sliceView != null)
+                    sliceView.IsVisible = showHidePerpendicularMultiSliceMenuItem.IsChecked;
             }
         }
 
@@ -1230,7 +1269,8 @@ namespace WpfDicomMprViewerDemo
         /// <summary>
         /// Starts the building of curvilinear slice.
         /// </summary>
-        private void StartBuildCurvilinearSlice()
+        /// <param name="useFreehandBuilder">The value indicating whether the freehand builder must be used.</param>
+        private void StartBuildCurvilinearSlice(bool useFreehandBuilder)
         {
             // if previous curvlinear slice must be removed
             if (_curvilinearSliceDicomMprTool.MprImageTool.FocusedSlice != null)
@@ -1251,7 +1291,15 @@ namespace WpfDicomMprViewerDemo
             _imageToolAppearanceSettings.SetCurvilinearSliceSettings(curvilinearSliceVisualizer);
 
             // start the building of curvilinear slice
-            WpfMprSliceView curvilinearSliceView = _planarSliceDicomMprTool.MprImageTool.AddAndBuildSlice(curvilinearSliceVisualizer);
+            WpfMprPolylineSliceView curvilinearSliceView =
+                (WpfMprPolylineSliceView)_planarSliceDicomMprTool.MprImageTool.AddAndBuildSlice(curvilinearSliceVisualizer);
+
+            if (useFreehandBuilder)
+            {
+                WpfPointBasedObjectFreehandBuilder builder = new WpfPointBasedObjectFreehandBuilder(curvilinearSliceView, 2, 1);
+                builder.FinishBuildingByDoubleMouseClick = false;
+                curvilinearSliceView.Builder = builder;
+            }
 
             // show slice in the right viewer
             _visualizationController.ShowSliceInViewer(curvilinearSliceImageViewer, curvilinearSlice);
@@ -1514,22 +1562,16 @@ namespace WpfDicomMprViewerDemo
             perpendicularMultiSlicePropertiesMenuItem.IsEnabled = false;
             savePerpendicularMultiSliceImageMenuItem.IsEnabled = false;
             savePerpendicularMultiSliceImagesMenuItem.IsEnabled = false;
+            showHidePerpendicularMultiSliceMenuItem.IsEnabled = false;
         }
 
         private void UpdatePerpendicualrMultiSliceImageViewerVisibility(bool isVisible)
         {
             if (isVisible)
-            {
                 splitedGrid.RowDefinitions[1].Height = new GridLength(1, GridUnitType.Star);
-                //gridSpliter.Visibility = Visibility.Visible;
-            }
             else
-            {
                 splitedGrid.RowDefinitions[1].Height = new GridLength(0);
-                //gridSpliter.Visibility = Visibility.Collapsed;
-            }
 
-            //splitedGrid.UpdateLayout();
             splitedGrid.InvalidateVisual();
         }
 
@@ -1630,7 +1672,7 @@ namespace WpfDicomMprViewerDemo
             // show slice in viewer
             _visualizationController.ShowSliceInViewer(planarSliceImageViewer, _currentPlanarSlice);
 
-            StartBuildCurvilinearSlice();
+            StartBuildCurvilinearSlice(false);
         }
 
         /// <summary>

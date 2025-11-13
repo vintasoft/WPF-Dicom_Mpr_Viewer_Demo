@@ -98,9 +98,14 @@
                 </MenuItem>
 
                 <MenuItem Header="Slice" Name="sliceMenuItem">
-                    <MenuItem Header="Build" Name="slice_buildMenuItem" Click="slice_buildMenuItem_Click" />
+                    <MenuItem Header="Build" Name="slice_buildMenuItem">
+                        <MenuItem Header="By Points" Name="slice_build_byPointsMenuItem" Click="slice_build_byPointsMenuItem_Click" />
+                        <MenuItem Header="Freehand" Name="slice_build_freehandMenuItem" Click="slice_build_freehandMenuItem_Click" />
+                    </MenuItem>
+                    <Separator />
                     <MenuItem Header="Create Perpendicular Multi Slice" Name="slice_createPerpendicularMultiSliceMenuItem" Click="slice_createPerpendicularMultiSliceMenuItem_Click" />
                     <MenuItem Header="Perpendicular Multi Slice Properties..." Name="perpendicularMultiSlicePropertiesMenuItem" IsEnabled="False" Click="perpendicularMultiSlicePropertiesMenuItem_Click" />
+                    <MenuItem Header="Show/Hide Perpendicular Multi Slice" Name="showHidePerpendicularMultiSliceMenuItem" IsEnabled="False" IsChecked="True" Click="showHidePerpendicularMultiSliceMenuItem_Click"/>
                 </MenuItem>
             </Menu>
 
