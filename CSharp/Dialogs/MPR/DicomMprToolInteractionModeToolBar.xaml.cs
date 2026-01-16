@@ -109,7 +109,7 @@ namespace WpfDicomMprViewerDemo
         /// <summary>
         /// The available mouse buttons.
         /// </summary>
-        VintasoftMouseButtons[] _availableMouseButtons = new VintasoftMouseButtons[] { 
+        VintasoftMouseButtons[] _availableMouseButtons = new VintasoftMouseButtons[] {
             VintasoftMouseButtons.Left, VintasoftMouseButtons.Middle, VintasoftMouseButtons.Right
         };
 
@@ -142,6 +142,7 @@ namespace WpfDicomMprViewerDemo
                         WpfDicomMprToolInteractionMode.Roll,
                         WpfDicomMprToolInteractionMode.Rotate3D,
                         WpfDicomMprToolInteractionMode.Zoom,
+                        WpfDicomMprToolInteractionMode.ViewProcessing,
                         WpfDicomMprToolInteractionMode.WindowLevel,
                         WpfDicomMprToolInteractionMode.Measure};
 
@@ -163,6 +164,8 @@ namespace WpfDicomMprViewerDemo
                 "WindowLevel_{0}{1}{2}Icon");
             _interactionModeToIconNameFormat.Add(WpfDicomMprToolInteractionMode.Zoom,
                 "Zoom_{0}{1}{2}Icon");
+            _interactionModeToIconNameFormat.Add(WpfDicomMprToolInteractionMode.ViewProcessing,
+                "ViewProcessing_{0}{1}{2}Icon");
 
             // initialize buttons
             InitButtons();
@@ -603,14 +606,14 @@ namespace WpfDicomMprViewerDemo
             _measurementAnnotationDeleteMenuButton = new MenuItem();
             _measurementAnnotationDeleteMenuButton.HeaderStringFormat = "{0} (Del)";
             _measurementAnnotationDeleteMenuButton.Header = "Delete";
-            
+
             CommandBinding deleteCommandBinding = new CommandBinding(_deleteCommand, measurementAnnotationDeleteButton_Click, deleteCommandBinding_CanExecute);
             KeyGesture deleteKeyGesture = new KeyGesture(Key.Delete);
             InputBinding deleteInputBinding = new InputBinding(_deleteCommand, deleteKeyGesture);
             _deleteCommand.InputGestures.Add(deleteKeyGesture);
             CommandBindings.Add(deleteCommandBinding);
             InputBindings.Add(deleteInputBinding);
-            
+
             _measurementAnnotationDeleteMenuButton.Click += new RoutedEventHandler(measurementAnnotationDeleteButton_Click);
             measureMenuButtonItems.Add(_measurementAnnotationDeleteMenuButton);
 
@@ -618,14 +621,14 @@ namespace WpfDicomMprViewerDemo
             _measurementAnnotationDeleteAllMenuButton = new MenuItem();
             _measurementAnnotationDeleteAllMenuButton.HeaderStringFormat = "{0} (Alt + Del)";
             _measurementAnnotationDeleteAllMenuButton.Header = "Delete All";
-            
+
             CommandBinding deleteAllCommandBinding = new CommandBinding(_deleteAllCommand, measurementAnnotationDeleteAllButton_Click, deleteAllCommandBinding_CanExecute);
             KeyGesture deleteAllKeyGesture = new KeyGesture(Key.Delete, ModifierKeys.Alt);
             InputBinding deleteAllInputBinding = new InputBinding(_deleteAllCommand, deleteAllKeyGesture);
             _deleteAllCommand.InputGestures.Add(deleteAllKeyGesture);
             CommandBindings.Add(deleteAllCommandBinding);
             InputBindings.Add(deleteAllInputBinding);
-            
+
             _measurementAnnotationDeleteAllMenuButton.Click += new RoutedEventHandler(measurementAnnotationDeleteAllButton_Click);
             measureMenuButtonItems.Add(_measurementAnnotationDeleteAllMenuButton);
 
@@ -633,15 +636,15 @@ namespace WpfDicomMprViewerDemo
             _measurementAnnotationDeleteAllOnViewersMenuButton = new MenuItem();
             _measurementAnnotationDeleteAllOnViewersMenuButton.HeaderStringFormat = "{0} (Ctrl + Del)";
             _measurementAnnotationDeleteAllOnViewersMenuButton.Header = "Delete All On Viewers";
-            
-            CommandBinding deleteAllOnViewersCommandBinding = new CommandBinding(_deleteAllOnViewersCommand, 
+
+            CommandBinding deleteAllOnViewersCommandBinding = new CommandBinding(_deleteAllOnViewersCommand,
                 measurementAnnotationDeleteAllOnViewersButton_Click, deleteAllOnViewersCommandBinding_CanExecute);
             KeyGesture deleteAllOnViewersKeyGesture = new KeyGesture(Key.Delete, ModifierKeys.Control);
             InputBinding deleteAllOnViewersInputBinding = new InputBinding(_deleteAllOnViewersCommand, deleteAllOnViewersKeyGesture);
             _deleteAllOnViewersCommand.InputGestures.Add(deleteAllOnViewersKeyGesture);
             CommandBindings.Add(deleteAllOnViewersCommandBinding);
             InputBindings.Add(deleteAllOnViewersInputBinding);
-            
+
             _measurementAnnotationDeleteAllOnViewersMenuButton.Click += new RoutedEventHandler(measurementAnnotationDeleteAllOnViewersButton_Click);
             measureMenuButtonItems.Add(_measurementAnnotationDeleteAllOnViewersMenuButton);
 
@@ -1173,28 +1176,14 @@ namespace WpfDicomMprViewerDemo
         private VintasoftMouseButtons GetMouseButtonsForInteractionMode(
             WpfDicomMprToolInteractionMode interactionMode)
         {
-            // the result mouse buttons
-            VintasoftMouseButtons resultMouseButton = VintasoftMouseButtons.None;
-
             // get the active DICOM MPR tool
             WpfDicomMprTool dicomMprTool = GetActiveMprTool();
 
-            // if active tool exists
-            if (dicomMprTool != null)
-            {
-                // for each available mouse button
-                foreach (VintasoftMouseButtons button in _availableMouseButtons)
-                {
-                    // get an interaction mode for mouse button
-                    WpfDicomMprToolInteractionMode mouseButtonInteractionMode = dicomMprTool.GetInteractionMode(button);
-                    // if interaction mode for mouse button equals to the analyzing interaction mode
-                    if (mouseButtonInteractionMode == interactionMode)
-                        // add mouse button to the result
-                        resultMouseButton |= button;
-                }
-            }
+            // if active tool not exists
+            if (dicomMprTool == null)
+                return VintasoftMouseButtons.None;
 
-            return resultMouseButton;
+            return dicomMprTool.GetMouseButtonsForInteractionMode(interactionMode);
         }
 
         /// <summary>

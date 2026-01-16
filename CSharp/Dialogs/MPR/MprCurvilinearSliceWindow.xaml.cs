@@ -14,6 +14,8 @@ using Vintasoft.Imaging.Dicom.Mpr.Wpf.UI;
 using Vintasoft.Imaging.Dicom.Mpr.Wpf.UI.VisualTools;
 using Vintasoft.Imaging.Dicom.Wpf.UI.VisualTools;
 using Vintasoft.Imaging.ImageProcessing;
+using Vintasoft.Imaging.ImageProcessing.Color;
+using Vintasoft.Imaging.ImageProcessing.Filters;
 using Vintasoft.Imaging.UI;
 using Vintasoft.Imaging.Wpf;
 using Vintasoft.Imaging.Wpf.UI;
@@ -144,6 +146,17 @@ namespace WpfDicomMprViewerDemo
         /// </summary>
         WindowState _nonFullScreenWindowState;
 
+        /// <summary>
+        /// The processing commands, which can be applied to an image region of DICOM MPR viewer.
+        /// </summary>
+        ProcessingCommandBase[] _processingCommands = new ProcessingCommandBase[]
+        {
+            null,
+            new InvertCommand(),
+            new BlurCommand(7),
+            new SharpenCommand(),
+        };
+
 
         #region Hot keys
 
@@ -194,7 +207,8 @@ namespace WpfDicomMprViewerDemo
                 WpfDicomMprToolInteractionMode.Roll,
                 WpfDicomMprToolInteractionMode.WindowLevel,
                 WpfDicomMprToolInteractionMode.Zoom,
-                WpfDicomMprToolInteractionMode.Measure
+                WpfDicomMprToolInteractionMode.Measure,
+                WpfDicomMprToolInteractionMode.ViewProcessing
             };
 
             _imageToolAppearanceSettings = imageToolAppearanceSettings;
@@ -262,6 +276,17 @@ namespace WpfDicomMprViewerDemo
             perpendicularMultiSliceImageViewer.GotFocus += new RoutedEventHandler(ImageViewer_GotFocus);
 
             UpdatePerpendicualrMultiSliceImageViewerVisibility(false);
+
+            foreach (ProcessingCommandBase processingCommand in _processingCommands)
+            {
+                string processingCommandName = "None";
+
+                if (processingCommand != null)
+                    processingCommandName = processingCommand.Name;
+
+                processingComboBox.Items.Add(processingCommandName);
+            }
+            processingComboBox.SelectedIndex = 0;
 
             planarSliceImageViewer.Focus();
 
@@ -896,6 +921,27 @@ namespace WpfDicomMprViewerDemo
             dialog.ShowDialog();
 
             UpdateDicomMprSettings();
+        }
+
+        /// <summary>
+        /// Handles the SelectionChanged event of processingComboBox object.
+        /// </summary>
+        private void processingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!IsInitialized)
+                return;
+
+            ProcessingCommandBase command = _processingCommands[processingComboBox.SelectedIndex];
+
+            if (_planarSliceDicomMprTool.ViewProcessingCommand == command)
+                return;
+
+            if (_planarSliceDicomMprTool.GetMouseButtonsForInteractionMode(WpfDicomMprToolInteractionMode.ViewProcessing) == VintasoftMouseButtons.None)
+                _planarSliceDicomMprTool.SetInteractionMode(VintasoftMouseButtons.Left, WpfDicomMprToolInteractionMode.ViewProcessing);
+
+            _planarSliceDicomMprTool.ViewProcessingCommand = command;
+            _curvilinearSliceDicomMprTool.ViewProcessingCommand = command;
+            _perpendicularMultiSliceDicomMprTool.ViewProcessingCommand = command;
         }
 
         #endregion

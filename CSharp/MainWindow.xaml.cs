@@ -21,7 +21,10 @@ using Vintasoft.Imaging.Dicom.Mpr.Wpf.UI.VisualTools;
 using Vintasoft.Imaging.Dicom.Wpf.UI;
 using Vintasoft.Imaging.Dicom.Wpf.UI.VisualTools;
 using Vintasoft.Imaging.ImageProcessing;
+using Vintasoft.Imaging.ImageProcessing.Color;
+using Vintasoft.Imaging.ImageProcessing.Filters;
 using Vintasoft.Imaging.Metadata;
+using Vintasoft.Imaging.UI;
 using Vintasoft.Imaging.Wpf;
 using Vintasoft.Imaging.Wpf.UI;
 using Vintasoft.Imaging.Wpf.UI.VisualTools;
@@ -130,6 +133,18 @@ namespace WpfDicomMprViewerDemo
         /// </summary>
         MenuItem _currentRulersUnitOfMeasureMenuItem = null;
 
+        /// <summary>
+        /// The processing commands, which can be applied to an image region of DICOM MPR viewer.
+        /// </summary>
+        ProcessingCommandBase[] _processingCommands = new ProcessingCommandBase[]
+        {
+            null,
+            new InvertCommand(),
+            new BlurCommand(7),
+            new SharpenCommand(),
+            new Vintasoft.Imaging.ImageProcessing.Fft.Filters.ImageSharpeningCommand()
+        };
+
 
         #region Hot keys
 
@@ -193,6 +208,17 @@ namespace WpfDicomMprViewerDemo
             dicomSeriesManagerControl1.FocusedSeriesIdentifierChanged += DicomSeriesManagerControl1_FocusedSeriesIdentifierChanged;
 
             InitFileDialogs();
+
+            foreach (ProcessingCommandBase processingCommand in _processingCommands)
+            {
+                string processingCommandName = "None";
+
+                if (processingCommand != null)
+                    processingCommandName = processingCommand.Name;
+
+                processingComboBox.Items.Add(processingCommandName);
+            }
+            processingComboBox.SelectedIndex = 0;
 
             UpdateUI();
 
@@ -1379,6 +1405,8 @@ namespace WpfDicomMprViewerDemo
                     oldVisualizationController.Dispose();
                 }
 
+                UpdateViewProcessingCommands();
+
                 imageViewer1.Focus();
 
                 return true;
@@ -1658,6 +1686,40 @@ namespace WpfDicomMprViewerDemo
             }
 
             _currentRulersUnitOfMeasureMenuItem.IsChecked = true;
+        }
+
+        /// <summary>
+        /// Handles the SelectionChanged event of processingComboBox object.
+        /// </summary>
+        private void processingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_dicomMprTools == null)
+                return;
+
+            UpdateViewProcessingCommands();
+
+            foreach (WpfDicomMprTool tool in _dicomMprTools)
+            {
+                if (tool.GetMouseButtonsForInteractionMode(WpfDicomMprToolInteractionMode.ViewProcessing) == VintasoftMouseButtons.None)
+                    tool.SetInteractionMode(VintasoftMouseButtons.Left, WpfDicomMprToolInteractionMode.ViewProcessing);
+            }
+        }
+
+        /// <summary>
+        /// Updates the <see cref="WpfDicomMprTool.ViewProcessingCommand"/>.
+        /// </summary>
+        private void UpdateViewProcessingCommands()
+        {
+            if (_dicomMprTools == null)
+                return;
+
+            ProcessingCommandBase command = _processingCommands[processingComboBox.SelectedIndex];
+
+            if (_dicomMprTools[0].ViewProcessingCommand == command)
+                return;
+
+            foreach (WpfDicomMprTool tool in _dicomMprTools)
+                tool.ViewProcessingCommand = command;
         }
 
         #endregion

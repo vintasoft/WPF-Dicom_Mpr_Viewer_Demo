@@ -75,6 +75,10 @@
                     <MenuItem Header="Text Overlay Settings..." Name="view_textOverlaySettingsMenuItem" Click="view_textOverlaySettingsMenuItem_Click" />
                     <MenuItem HeaderStringFormat="{}{0} (F10)" Header="Show Text Overlay" Name="view_showTextOverlayMenuItem" Click="view_showTextOverlayMenuItem_Click" IsChecked="True"/>
                     <Separator />
+                    <MenuItem Header="Processing" Name="processingMenuItem">
+                        <ComboBox Name="processingComboBox" SelectionChanged="processingComboBox_SelectionChanged" Width="120" />
+                    </MenuItem>
+                    <Separator />
                     <MenuItem Header="Settings..." Name="view_settingsMenuItem" Click="view_settingsMenuItem_Click" />
                 </MenuItem>
 

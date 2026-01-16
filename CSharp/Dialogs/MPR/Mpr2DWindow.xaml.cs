@@ -15,6 +15,8 @@ using Vintasoft.Imaging.Dicom.Mpr.Wpf.UI;
 using Vintasoft.Imaging.Dicom.Mpr.Wpf.UI.VisualTools;
 using Vintasoft.Imaging.Dicom.Wpf.UI.VisualTools;
 using Vintasoft.Imaging.ImageProcessing;
+using Vintasoft.Imaging.ImageProcessing.Color;
+using Vintasoft.Imaging.ImageProcessing.Filters;
 using Vintasoft.Imaging.UI;
 using Vintasoft.Imaging.Wpf.UI.VisualTools;
 
@@ -87,6 +89,17 @@ namespace WpfDicomMprViewerDemo
         /// The slice type.
         /// </summary>
         SliceType _sliceType;
+
+        /// <summary>
+        /// The processing commands, which can be applied to an image region of DICOM MPR viewer.
+        /// </summary>
+        ProcessingCommandBase[] _processingCommands = new ProcessingCommandBase[]
+        {
+            null,
+            new InvertCommand(),
+            new BlurCommand(7),
+            new SharpenCommand(),
+        };
 
 
         #region Animation
@@ -169,7 +182,8 @@ namespace WpfDicomMprViewerDemo
                 WpfDicomMprToolInteractionMode.Pan,
                 WpfDicomMprToolInteractionMode.WindowLevel,
                 WpfDicomMprToolInteractionMode.Zoom,
-                WpfDicomMprToolInteractionMode.Measure
+                WpfDicomMprToolInteractionMode.Measure,
+                WpfDicomMprToolInteractionMode.ViewProcessing
             };
 
             _mprSettingsManager = settingsManager;
@@ -224,6 +238,17 @@ namespace WpfDicomMprViewerDemo
 
             _isWindowClosed = false;
 
+            foreach (ProcessingCommandBase processingCommand in _processingCommands)
+            {
+                string processingCommandName = "None";
+
+                if (processingCommand != null)
+                    processingCommandName = processingCommand.Name;
+
+                processingComboBox.Items.Add(processingCommandName);
+            }
+            processingComboBox.SelectedIndex = 0;
+
             _isInitialized = true;
 
             imageViewer1.Focus();
@@ -260,6 +285,7 @@ namespace WpfDicomMprViewerDemo
         }
 
         #endregion
+
 
 
         #region Methods
@@ -586,6 +612,25 @@ namespace WpfDicomMprViewerDemo
 
             // hide the color mark
             _dicomMprTool.MprImageTool.IsFocusedSliceColorMarkVisible = false;
+        }
+
+        /// <summary>
+        /// Handles the SelectionChanged event of processingComboBox object.
+        /// </summary>
+        private void processingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!IsInitialized)
+                return;
+
+            ProcessingCommandBase command = _processingCommands[processingComboBox.SelectedIndex];
+
+            if (_dicomMprTool.ViewProcessingCommand == command)
+                return;
+
+            if (_dicomMprTool.GetMouseButtonsForInteractionMode(WpfDicomMprToolInteractionMode.ViewProcessing) == VintasoftMouseButtons.None)
+                _dicomMprTool.SetInteractionMode(VintasoftMouseButtons.Left, WpfDicomMprToolInteractionMode.ViewProcessing);
+
+            _dicomMprTool.ViewProcessingCommand = command;
         }
 
         #endregion
