@@ -120,6 +120,7 @@ namespace WpfDicomMprViewerDemo
             new InvertCommand(),
             new BlurCommand(7),
             new SharpenCommand(),
+            new Vintasoft.Imaging.ImageProcessing.Fft.Filters.ImageSharpeningCommand()
         };
 
 
@@ -268,6 +269,19 @@ namespace WpfDicomMprViewerDemo
             }
 
             this.Loaded += new RoutedEventHandler(Mpr2DWindow_Loaded);
+
+            foreach (ProcessingCommandBase processingCommand in _processingCommands)
+            {
+                string processingCommandName = "None";
+
+                if (processingCommand != null)
+                    processingCommandName = processingCommand.Name;
+
+                viewProcessingComboBox.Items.Add(processingCommandName);
+                viewerProcessingComboBox.Items.Add(processingCommandName);
+            }
+            viewProcessingComboBox.SelectedIndex = 0;
+            viewerProcessingComboBox.SelectedIndex = 0;
 
             _isInitialized = true;
 
@@ -614,14 +628,14 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the SelectionChanged event of processingComboBox object.
+        /// Handles the SelectionChanged event of viewProcessingComboBox object.
         /// </summary>
-        private void processingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void viewProcessingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!IsInitialized)
                 return;
 
-            ProcessingCommandBase command = _processingCommands[processingComboBox.SelectedIndex];
+            ProcessingCommandBase command = _processingCommands[viewProcessingComboBox.SelectedIndex];
 
             if (_planarSliceDicomMprTool.ViewProcessingCommand == command)
                 return;
@@ -631,6 +645,23 @@ namespace WpfDicomMprViewerDemo
 
             _planarSliceDicomMprTool.ViewProcessingCommand = command;
             _multiSliceDicomMprTool.ViewProcessingCommand = command;
+        }
+
+        /// <summary>
+        /// Handles the SelectionChanged event of viewerProcessingComboBox object.
+        /// </summary>
+        private void viewerProcessingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!IsInitialized)
+                return;
+
+            ProcessingCommandBase command = _processingCommands[viewerProcessingComboBox.SelectedIndex];
+
+            if (_planarSliceDicomMprTool.DicomViewerTool.DisplayedImageProcessing == command)
+                return;
+
+            _planarSliceDicomMprTool.DicomViewerTool.DisplayedImageProcessing = command;
+            _multiSliceDicomMprTool.DicomViewerTool.DisplayedImageProcessing = command;
         }
 
         #endregion

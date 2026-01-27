@@ -99,6 +99,7 @@ namespace WpfDicomMprViewerDemo
             new InvertCommand(),
             new BlurCommand(7),
             new SharpenCommand(),
+            new Vintasoft.Imaging.ImageProcessing.Fft.Filters.ImageSharpeningCommand()
         };
 
 
@@ -245,9 +246,11 @@ namespace WpfDicomMprViewerDemo
                 if (processingCommand != null)
                     processingCommandName = processingCommand.Name;
 
-                processingComboBox.Items.Add(processingCommandName);
+                viewProcessingComboBox.Items.Add(processingCommandName);
+                viewerProcessingComboBox.Items.Add(processingCommandName);
             }
-            processingComboBox.SelectedIndex = 0;
+            viewProcessingComboBox.SelectedIndex = 0;
+            viewerProcessingComboBox.SelectedIndex = 0;
 
             _isInitialized = true;
 
@@ -615,14 +618,14 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the SelectionChanged event of processingComboBox object.
+        /// Handles the SelectionChanged event of viewProcessingComboBox object.
         /// </summary>
-        private void processingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void viewProcessingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!IsInitialized)
                 return;
 
-            ProcessingCommandBase command = _processingCommands[processingComboBox.SelectedIndex];
+            ProcessingCommandBase command = _processingCommands[viewProcessingComboBox.SelectedIndex];
 
             if (_dicomMprTool.ViewProcessingCommand == command)
                 return;
@@ -631,6 +634,22 @@ namespace WpfDicomMprViewerDemo
                 _dicomMprTool.SetInteractionMode(VintasoftMouseButtons.Left, WpfDicomMprToolInteractionMode.ViewProcessing);
 
             _dicomMprTool.ViewProcessingCommand = command;
+        }
+
+        /// <summary>
+        /// Handles the SelectionChanged event of viewerProcessingComboBox object.
+        /// </summary>
+        private void viewerProcessingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!IsInitialized)
+                return;
+
+            ProcessingCommandBase command = _processingCommands[viewerProcessingComboBox.SelectedIndex];
+
+            if (_dicomMprTool.DicomViewerTool.DisplayedImageProcessing == command)
+                return;
+
+            _dicomMprTool.DicomViewerTool.DisplayedImageProcessing = command;
         }
 
         #endregion

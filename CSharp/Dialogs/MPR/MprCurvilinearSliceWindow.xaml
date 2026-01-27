@@ -95,8 +95,11 @@
                     <Separator />
                     <MenuItem Header="Text Overlay Settings..." Name="view_textOverlaySettingsMenuItem" Click="view_textOverlaySettingsMenuItem_Click" />
                     <Separator />
-                    <MenuItem Header="Processing" Name="processingMenuItem">
-                        <ComboBox Name="processingComboBox" SelectionChanged="processingComboBox_SelectionChanged" Width="120" />
+                    <MenuItem Header="View Processing" Name="viewProcessingMenuItem">
+                        <ComboBox Name="viewProcessingComboBox" SelectionChanged="viewProcessingComboBox_SelectionChanged" Width="120" />
+                    </MenuItem>
+                    <MenuItem Header="Viewer Processing" Name="processingMenuItem">
+                        <ComboBox Name="viewerProcessingComboBox" SelectionChanged="viewerProcessingComboBox_SelectionChanged" Width="120" />
                     </MenuItem>
                     <Separator />
                     <MenuItem Header="Settings..." Name="view_settingsMenuItem" Click="view_settingsMenuItem_Click" />

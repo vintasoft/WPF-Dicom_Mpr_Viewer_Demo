@@ -216,9 +216,11 @@ namespace WpfDicomMprViewerDemo
                 if (processingCommand != null)
                     processingCommandName = processingCommand.Name;
 
-                processingComboBox.Items.Add(processingCommandName);
+                viewProcessingComboBox.Items.Add(processingCommandName);
+                viewerProcessingComboBox.Items.Add(processingCommandName);
             }
-            processingComboBox.SelectedIndex = 0;
+            viewProcessingComboBox.SelectedIndex = 0;
+            viewerProcessingComboBox.SelectedIndex = 0;
 
             UpdateUI();
 
@@ -1689,9 +1691,9 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
-        /// Handles the SelectionChanged event of processingComboBox object.
+        /// Handles the SelectionChanged event of viewProcessingComboBox object.
         /// </summary>
-        private void processingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void viewProcessingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (_dicomMprTools == null)
                 return;
@@ -1706,6 +1708,23 @@ namespace WpfDicomMprViewerDemo
         }
 
         /// <summary>
+        /// Handles the SelectionChanged event of viewerProcessingComboBox object.
+        /// </summary>
+        private void viewerProcessingComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (_dicomMprTools == null)
+                return;
+
+            ProcessingCommandBase command = _processingCommands[viewerProcessingComboBox.SelectedIndex];
+
+            if (_dicomMprTools[0].DicomViewerTool.DisplayedImageProcessing == command)
+                return;
+
+            foreach (WpfDicomMprTool tool in _dicomMprTools)
+                tool.DicomViewerTool.DisplayedImageProcessing = command;
+        }
+
+        /// <summary>
         /// Updates the <see cref="WpfDicomMprTool.ViewProcessingCommand"/>.
         /// </summary>
         private void UpdateViewProcessingCommands()
@@ -1713,7 +1732,7 @@ namespace WpfDicomMprViewerDemo
             if (_dicomMprTools == null)
                 return;
 
-            ProcessingCommandBase command = _processingCommands[processingComboBox.SelectedIndex];
+            ProcessingCommandBase command = _processingCommands[viewProcessingComboBox.SelectedIndex];
 
             if (_dicomMprTools[0].ViewProcessingCommand == command)
                 return;
