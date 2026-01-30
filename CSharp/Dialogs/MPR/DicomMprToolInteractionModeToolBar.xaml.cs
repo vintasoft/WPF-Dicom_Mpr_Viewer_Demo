@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -7,12 +8,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 using Vintasoft.Imaging;
+using Vintasoft.Imaging.Annotation;
+using Vintasoft.Imaging.Annotation.Formatters;
 using Vintasoft.Imaging.Annotation.Measurements;
 using Vintasoft.Imaging.Annotation.Wpf.UI;
 using Vintasoft.Imaging.Annotation.Wpf.UI.Measurements;
 using Vintasoft.Imaging.Dicom.Mpr.Wpf.UI.VisualTools;
 using Vintasoft.Imaging.UI;
 using Vintasoft.Imaging.Wpf;
+
+using WpfDemosCommonCode;
 
 namespace WpfDicomMprViewerDemo
 {
@@ -100,6 +105,16 @@ namespace WpfDicomMprViewerDemo
         /// The drop down menu that contains available interaction modes for mouse wheel.
         /// </summary>
         MenuItem _mouseWheelDropDownMenu;
+
+        /// <summary>
+        /// The menu button that loads the measurement annotations in focused image viewer.
+        /// </summary>
+        MenuItem _measurementAnnotationLoadMenuButton;
+
+        /// <summary>
+        /// The menu button that saves the measurement annotations in focused image viewer.
+        /// </summary>
+        MenuItem _measurementAnnotationSaveMenuButton;
 
         /// <summary>
         /// The icon name of mouse wheel button.
@@ -425,6 +440,8 @@ namespace WpfDicomMprViewerDemo
             _menuButtonToInteractionMode.Clear();
             _measurementAnnotationDeleteMenuButton = null;
             _measurementAnnotationDeleteAllMenuButton = null;
+            _measurementAnnotationLoadMenuButton = null;
+            _measurementAnnotationSaveMenuButton = null;
 
             // for each suported interaction mode
             foreach (WpfDicomMprToolInteractionMode interactionMode in _supportedInteractionModes)
@@ -648,6 +665,20 @@ namespace WpfDicomMprViewerDemo
             _measurementAnnotationDeleteAllOnViewersMenuButton.Click += new RoutedEventHandler(measurementAnnotationDeleteAllOnViewersButton_Click);
             measureMenuButtonItems.Add(_measurementAnnotationDeleteAllOnViewersMenuButton);
 
+            // add seperator
+            measureMenuButtonItems.Add(new Separator());
+
+            // add "Load Measurements" button
+            _measurementAnnotationLoadMenuButton = new MenuItem();
+            _measurementAnnotationLoadMenuButton.Header = "Load Measurements...";
+            _measurementAnnotationLoadMenuButton.Click += measurementAnnotationLoadMenuButton_Click;
+            measureMenuButtonItems.Add(_measurementAnnotationLoadMenuButton);
+
+            // add "Save Measurements" button
+            _measurementAnnotationSaveMenuButton = new MenuItem();
+            _measurementAnnotationSaveMenuButton.Header = "Save Measurements...";
+            _measurementAnnotationSaveMenuButton.Click += measurementAnnotationSaveMenuButton_Click;
+            measureMenuButtonItems.Add(_measurementAnnotationSaveMenuButton);
 
             // add seperator
             measureMenuButtonItems.Add(new Separator());
@@ -816,6 +847,88 @@ namespace WpfDicomMprViewerDemo
                 if (dicomMprTool.MeasureTool.DeleteAllAction.IsEnabled)
                     // remove all measurement annotations
                     dicomMprTool.MeasureTool.DeleteAllAction.Execute();
+            }
+        }
+
+        /// <summary>
+        /// Loads the measurement annotations in active DICOM MPR tool.
+        /// </summary>
+        private void measurementAnnotationLoadMenuButton_Click(object sender, RoutedEventArgs e)
+        {
+            // get active DICOM MPR tool
+            WpfDicomMprTool dicomMprTool = GetActiveMprTool();
+            if (dicomMprTool == null)
+                return;
+
+            using (System.Windows.Forms.OpenFileDialog openFileDialog = new System.Windows.Forms.OpenFileDialog())
+            {
+                openFileDialog.FileName = null;
+                openFileDialog.Filter =
+                    "Binary Annotations(*.vsabm)|*.vsabm|XMP Annotations(*.xmpm)|*.xmpm|All Formats(*.vsabm;*.xmpm)|*.vsabm;*.xmpm";
+                openFileDialog.FilterIndex = 3;
+
+                if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    try
+                    {
+                        using (FileStream fs = new FileStream(openFileDialog.FileName, FileMode.Open, FileAccess.Read))
+                        {
+                            WpfImageMeasureTool visualTool = dicomMprTool.MeasureTool;
+                            // get the annotation collection
+                            AnnotationDataCollection annotations = visualTool.AnnotationViewCollection.DataCollection;
+                            // clear the annotation collection
+                            annotations.ClearAndDisposeItems();
+                            // add annotations from stream to the annotation collection
+                            annotations.AddFromStream(fs, visualTool.ImageViewer.Image.Resolution);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        DemosTools.ShowErrorMessage(ex);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Saves the measurement annotations in active DICOM MPR tool.
+        /// </summary>
+        private void measurementAnnotationSaveMenuButton_Click(object sender, RoutedEventArgs e)
+        {
+            // get active DICOM MPR tool
+            WpfDicomMprTool dicomMprTool = GetActiveMprTool();
+            if (dicomMprTool == null)
+                return;
+
+            using (System.Windows.Forms.SaveFileDialog saveFileDialog = new System.Windows.Forms.SaveFileDialog())
+            {
+                saveFileDialog.FileName = null;
+                saveFileDialog.Filter = "Binary Annotations|*.vsabm|XMP Annotations|*.xmpm";
+                saveFileDialog.FilterIndex = 1;
+
+                if (saveFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    try
+                    {
+                        using (FileStream fs = new FileStream(saveFileDialog.FileName, FileMode.Create, FileAccess.ReadWrite))
+                        {
+                            AnnotationFormatter annotationFormatter = null;
+                            if (saveFileDialog.FilterIndex == 1)
+                                annotationFormatter = new AnnotationVintasoftBinaryFormatter();
+                            else if (saveFileDialog.FilterIndex == 2)
+                                annotationFormatter = new AnnotationVintasoftXmpFormatter();
+
+                            WpfImageMeasureTool visualTool = dicomMprTool.MeasureTool;
+                            AnnotationDataCollection annotations = visualTool.AnnotationViewCollection.DataCollection;
+
+                            annotationFormatter.Serialize(fs, annotations);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        DemosTools.ShowErrorMessage(ex);
+                    }
+                }
             }
         }
 
