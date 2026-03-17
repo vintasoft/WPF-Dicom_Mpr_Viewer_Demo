@@ -2,7 +2,7 @@
 
 using Vintasoft.Imaging.Codecs.Encoders;
 
-using WpfDemosCommonCode.Imaging.Codecs.Dialogs;
+using WpfCommonCode.Imaging.Codecs.Dialogs;
 
 namespace WpfDicomMprViewerDemo
 {

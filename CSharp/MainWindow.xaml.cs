@@ -30,10 +30,10 @@ using Vintasoft.Imaging.Wpf.UI;
 using Vintasoft.Imaging.Wpf.UI.VisualTools;
 using Vintasoft.Imaging.Wpf.UI.VisualTools.GraphicObjects;
 
-using WpfDemosCommonCode;
-using WpfDemosCommonCode.CustomControls;
-using WpfDemosCommonCode.Imaging;
-using WpfDemosCommonCode.Imaging.Codecs;
+using WpfCommonCode;
+using WpfCommonCode.CustomControls;
+using WpfCommonCode.Imaging;
+using WpfCommonCode.Imaging.Codecs;
 
 namespace WpfDicomMprViewerDemo
 {

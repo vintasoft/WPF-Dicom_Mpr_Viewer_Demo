@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfDicomMprViewerDemo"
         mc:Ignorable="d"
-        xmlns:CustomControls="clr-namespace:WpfDemosCommonCode.CustomControls"
+        xmlns:CustomControls="clr-namespace:WpfCommonCode.CustomControls"
         Title="Perpendicular Multislice Default Settings" Height="186" Width="290">
     <Grid>
         <Grid.ColumnDefinitions>

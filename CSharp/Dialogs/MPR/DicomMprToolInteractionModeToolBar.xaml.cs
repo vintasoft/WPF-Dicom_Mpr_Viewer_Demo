@@ -17,7 +17,7 @@ using Vintasoft.Imaging.Dicom.Mpr.Wpf.UI.VisualTools;
 using Vintasoft.Imaging.UI;
 using Vintasoft.Imaging.Wpf;
 
-using WpfDemosCommonCode;
+using WpfCommonCode;
 
 namespace WpfDicomMprViewerDemo
 {

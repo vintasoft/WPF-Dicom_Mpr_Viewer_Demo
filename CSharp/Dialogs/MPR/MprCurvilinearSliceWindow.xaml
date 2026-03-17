@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:cc="clr-namespace:WpfDicomMprViewerDemo"        
     xmlns:ImagingControls="clr-namespace:Vintasoft.Imaging.Wpf.UI;assembly=Vintasoft.Imaging.Wpf.UI"
-    xmlns:CustomConstrols="clr-namespace:WpfDemosCommonCode.Imaging"
+    xmlns:CustomConstrols="clr-namespace:WpfCommonCode.Imaging"
     xmlns:DicomViewerDemoControls ="clr-namespace:WpfDicomMprViewerDemo"
     Title="Curvilinear Slice" Height="700" Width="900" WindowStartupLocation="CenterOwner">
 

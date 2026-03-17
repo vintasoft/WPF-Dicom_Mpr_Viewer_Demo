@@ -23,9 +23,9 @@ using Vintasoft.Imaging.Wpf.UI.VisualTools;
 using Vintasoft.Imaging.Wpf.UI.VisualTools.UserInteraction;
 using Vintasoft.Primitives;
 
-using WpfDemosCommonCode;
-using WpfDemosCommonCode.Imaging;
-using WpfDemosCommonCode.Imaging.Codecs;
+using WpfCommonCode;
+using WpfCommonCode.Imaging;
+using WpfCommonCode.Imaging.Codecs;
 
 namespace WpfDicomMprViewerDemo
 {

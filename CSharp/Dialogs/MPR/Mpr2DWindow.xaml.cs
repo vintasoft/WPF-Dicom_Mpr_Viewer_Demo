@@ -20,9 +20,9 @@ using Vintasoft.Imaging.ImageProcessing.Filters;
 using Vintasoft.Imaging.UI;
 using Vintasoft.Imaging.Wpf.UI.VisualTools;
 
-using WpfDemosCommonCode;
-using WpfDemosCommonCode.Imaging;
-using WpfDemosCommonCode.Imaging.Codecs;
+using WpfCommonCode;
+using WpfCommonCode.Imaging;
+using WpfCommonCode.Imaging.Codecs;
 
 namespace WpfDicomMprViewerDemo
 {
