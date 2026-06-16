@@ -177,7 +177,16 @@ namespace WpfDicomMprViewerDemo
 
 
 
-        #region Constructors
+        #region Constructors        
+
+        /// <summary>
+        /// Initializes the <see cref="MainWindow"/> class.
+        /// </summary>
+        static MainWindow()
+        {
+            // load VintaSoft JPEG2000 Plug-in - it is necessary for DICOM images with JPEG2000 compression
+            Jpeg2000AssemblyLoader.Load();
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainWindow"/> class.
@@ -195,9 +204,6 @@ namespace WpfDicomMprViewerDemo
             this.Title = "VintaSoft WPF DICOM MPR Viewer Demo v" + ImagingGlobalSettings.ProductVersion;
 
             MoveDicomCodecToFirstPosition();
-
-            // load VintaSoft JPEG2000 Plug-in - it is necessary for DICOM images with JPEG2000 compression
-            Jpeg2000AssemblyLoader.Load();
 
             // subscribe to the image viewers events
             imageViewer1.GotFocus += new RoutedEventHandler(ImageViewer_GotFocus);
@@ -223,7 +229,6 @@ namespace WpfDicomMprViewerDemo
             viewerProcessingComboBox.SelectedIndex = 0;
 
             UpdateUI();
-
         }
 
         #endregion
